@@ -1,0 +1,298 @@
+/* ═══════════════════════════════════════════════════════════
+   ZeroLabs Global Design System — zerolabs.css
+   Applied to all inner pages (dashboard, skill_graph,
+   roadmap, projects, career_matches). Index is untouched.
+═══════════════════════════════════════════════════════════ */
+
+/* ── Typography & Base ──────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+    font-family: 'Inter', sans-serif !important;
+    background-color: #0d0d0f !important;
+    color: #e5e2e1 !important;
+    -webkit-font-smoothing: antialiased;
+    background-image:
+        radial-gradient(ellipse 80% 50% at 20% -10%, rgba(173, 198, 255, 0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 80% 110%, rgba(78, 222, 163, 0.05) 0%, transparent 60%);
+    background-attachment: fixed;
+}
+
+/* ── Scrollbar ──────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: #0d0d0f; }
+::-webkit-scrollbar-thumb { background: #2a2a3a; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: #464555; }
+
+/* ── Sidebar Upgrade ────────────────────────────────────── */
+nav.fixed {
+    background: rgba(15, 15, 18, 0.95) !important;
+    backdrop-filter: blur(24px) !important;
+    border-right: 1px solid rgba(70, 69, 85, 0.18) !important;
+    box-shadow: 4px 0 40px rgba(0,0,0,0.5) !important;
+}
+
+nav.fixed a {
+    position: relative;
+    border-radius: 0.5rem;
+    transition: background 0.22s ease, color 0.22s ease, transform 0.22s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.22s ease !important;
+}
+
+nav.fixed a:not(.active-nav):hover {
+    background: rgba(173, 198, 255, 0.08) !important;
+    color: #ADC6FF !important;
+    transform: translateX(5px) !important;
+    box-shadow: inset 0 0 20px rgba(173, 198, 255, 0.05);
+}
+
+/* Active nav item glow */
+nav.fixed a.bg-\[#2A2A2A\] {
+    background: linear-gradient(135deg, rgba(173,198,255,0.15), rgba(0,92,198,0.12)) !important;
+    border: 1px solid rgba(173,198,255,0.2) !important;
+    box-shadow: 0 0 20px rgba(173,198,255,0.1), inset 0 0 15px rgba(173,198,255,0.05) !important;
+    color: #ADC6FF !important;
+}
+
+/* Sidebar icon ripple on click */
+nav.fixed a:active {
+    transform: translateX(3px) scale(0.97) !important;
+}
+
+/* ── Top Header Upgrade ─────────────────────────────────── */
+header.fixed {
+    background: rgba(13,13,15,0.75) !important;
+    backdrop-filter: blur(28px) saturate(180%) !important;
+    border-bottom: 1px solid rgba(70,69,85,0.15) !important;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4) !important;
+}
+
+/* ── Card System ────────────────────────────────────────── */
+.glass-card,
+.bg-surface-container-low,
+.bg-surface-container,
+.glass-panel,
+.interactive-card,
+.project-card {
+    position: relative;
+    border-radius: 0.75rem;
+    transition:
+        transform 0.22s cubic-bezier(0.34,1.56,0.64,1),
+        box-shadow 0.25s ease,
+        border-color 0.25s ease !important;
+}
+
+/* Hover lift */
+.glass-card:hover,
+.bg-surface-container-low:hover,
+.bg-surface-container:hover,
+.glass-panel:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.45), 0 0 0 1px rgba(173,198,255,0.1) !important;
+}
+
+/* Dynamic radial glow following cursor (set via JS) */
+.glass-card::before,
+.bg-surface-container-low::before,
+.bg-surface-container::before,
+.glass-panel::before,
+.interactive-card::before,
+.project-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(
+        600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+        rgba(173, 198, 255, 0.08),
+        transparent 50%
+    );
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+    z-index: 0;
+}
+.glass-card:hover::before,
+.bg-surface-container-low:hover::before,
+.bg-surface-container:hover::before,
+.glass-panel:hover::before,
+.interactive-card:hover::before,
+.project-card:hover::before { opacity: 1; }
+
+/* Ensure card children stay above the glow overlay */
+.glass-card > *, .bg-surface-container-low > *, .bg-surface-container > *,
+.glass-panel > *, .interactive-card > *, .project-card > * { position: relative; z-index: 1; }
+
+/* ── Page Entrance Animation ────────────────────────────── */
+main {
+    animation: pageEnter 0.7s cubic-bezier(0.19,1,0.22,1) both;
+}
+@keyframes pageEnter {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Staggered Item Entrance ────────────────────────────── */
+.visually-stagger,
+.project-card,
+article {
+    opacity: 0;
+    transform: translateY(30px) scale(0.97);
+    animation: itemEnter 0.6s cubic-bezier(0.19,1,0.22,1) forwards;
+}
+@keyframes itemEnter {
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Cascade delays */
+.project-card:nth-child(1), article:nth-child(1), .visually-stagger:nth-child(1) { animation-delay: 0.05s; }
+.project-card:nth-child(2), article:nth-child(2), .visually-stagger:nth-child(2) { animation-delay: 0.12s; }
+.project-card:nth-child(3), article:nth-child(3), .visually-stagger:nth-child(3) { animation-delay: 0.19s; }
+.project-card:nth-child(4), article:nth-child(4), .visually-stagger:nth-child(4) { animation-delay: 0.26s; }
+.project-card:nth-child(5), article:nth-child(5), .visually-stagger:nth-child(5) { animation-delay: 0.33s; }
+.project-card:nth-child(6), article:nth-child(6), .visually-stagger:nth-child(6) { animation-delay: 0.40s; }
+
+/* ── Buttons ─────────────────────────────────────────────── */
+button, a[class*="bg-gradient"] {
+    transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.2s ease, filter 0.2s ease !important;
+}
+button:hover, a[class*="bg-gradient"]:hover {
+    filter: brightness(1.12);
+}
+button:active, a[class*="bg-gradient"]:active {
+    transform: scale(0.96) !important;
+}
+
+/* Analyze / Primary CTA glow */
+button[class*="bg-gradient-to-r"],
+a[class*="bg-gradient-to-r"] {
+    box-shadow: 0 0 0 rgba(173,198,255,0);
+    transition: box-shadow 0.3s ease, transform 0.2s cubic-bezier(0.34,1.56,0.64,1), filter 0.2s ease !important;
+}
+button[class*="bg-gradient-to-r"]:hover,
+a[class*="bg-gradient-to-r"]:hover {
+    box-shadow: 0 0 28px rgba(173,198,255,0.35) !important;
+}
+
+/* ── Inputs ──────────────────────────────────────────────── */
+input, select {
+    transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+input:focus, select:focus {
+    border-color: rgba(173,198,255,0.5) !important;
+    box-shadow: 0 0 0 3px rgba(173,198,255,0.12), 0 0 16px rgba(173,198,255,0.08) !important;
+    outline: none !important;
+}
+
+/* ── Progress Bar Animated Fill ─────────────────────────── */
+[class*="h-full"][class*="bg-gradient"],
+[class*="h-full"][class*="bg-primary"],
+[class*="h-full"][class*="bg-tertiary"],
+[class*="h-full"][class*="bg-secondary"] {
+    animation: barFill 1.2s cubic-bezier(0.19,1,0.22,1) both;
+    animation-delay: 0.4s;
+    transform-origin: left;
+}
+@keyframes barFill {
+    from { transform: scaleX(0); }
+    to   { transform: scaleX(1); }
+}
+
+/* ── Score / Number Pulse ───────────────────────────────── */
+.score-orb, [class*="text-4xl"][class*="font-black"],
+[class*="text-\\[3.5rem\\]"][class*="font-bold"] {
+    transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), text-shadow 0.3s ease;
+}
+.project-card:hover .score-orb,
+.glass-card:hover [class*="text-4xl"][class*="font-black"] {
+    transform: scale(1.15);
+    text-shadow: 0 0 20px rgba(78,222,163,0.5);
+}
+
+/* ── Skill/Status Badge Pop ─────────────────────────────── */
+[class*="px-3"][class*="py-1"], [class*="px-2"][class*="py-1"] {
+    transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.2s ease !important;
+}
+[class*="px-3"][class*="py-1"]:hover, [class*="px-2"][class*="py-1"]:hover {
+    transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+}
+
+/* ── Ripple Glow on Click ───────────────────────────────── */
+.ripple-host { overflow: hidden; }
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    transform: scale(0);
+    animation: rippleOut 0.55s linear;
+    background: rgba(173,198,255,0.18);
+    pointer-events: none;
+    z-index: 99;
+}
+@keyframes rippleOut {
+    to { transform: scale(4); opacity: 0; }
+}
+
+/* ── Tooltip ─────────────────────────────────────────────── */
+[data-tip] {
+    position: relative;
+}
+[data-tip]::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%) translateY(4px);
+    background: rgba(30,30,40,0.95);
+    color: #e5e2e1;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+    border: 1px solid rgba(70,69,85,0.3);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    z-index: 100;
+}
+[data-tip]:hover::after {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* ── Neon Pulse on Live Indicators ─────────────────────── */
+@keyframes neonPulse {
+    0%, 100% { box-shadow: 0 0 4px rgba(78,222,163,0.6); opacity: 1; }
+    50%       { box-shadow: 0 0 12px rgba(78,222,163,0.9); opacity: 0.7; }
+}
+.animate-pulse {
+    animation: neonPulse 2s ease-in-out infinite !important;
+}
+
+/* ── Timeline node hover ────────────────────────────────── */
+.absolute.rounded-full {
+    transition: box-shadow 0.3s ease, transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+}
+.absolute.rounded-full:hover {
+    box-shadow: 0 0 24px rgba(173,198,255,0.4) !important;
+    transform: scale(1.12);
+}
+
+/* ── Radar Chart Polygon Pulse ──────────────────────────── */
+svg polygon {
+    animation: radarPulse 3s ease-in-out infinite alternate;
+    transform-origin: center;
+}
+@keyframes radarPulse {
+    from { opacity: 0.7; }
+    to   { opacity: 1; filter: drop-shadow(0 0 6px rgba(173,198,255,0.5)); }
+}
+
+/* ── Gradient text utility ──────────────────────────────── */
+.zl-gradient-text {
+    background: linear-gradient(90deg, #ADC6FF, #4edea3);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
