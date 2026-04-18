@@ -52,6 +52,43 @@
             </div>`;
     }
 
+    const PRIORITY_CONFIG = {
+        1: { label: 'Lead', tone: 'bg-tertiary/15 text-tertiary border-tertiary/30', icon: 'star' },
+        2: { label: 'Strong', tone: 'bg-primary/15 text-primary border-primary/30', icon: 'bolt' }
+    };
+
+    function renderResumeRail(list) {
+        const section = $('zl-resume-rail-section');
+        const host = $('zl-resume-rail');
+        if (!section || !host) return;
+        const prioritized = (list || [])
+            .filter(p => p.resume_priority === 1 || p.resume_priority === 2)
+            .sort((a, b) => (a.resume_priority - b.resume_priority) || ((b.score ?? 0) - (a.score ?? 0)))
+            .slice(0, 3);
+        if (!prioritized.length) { section.classList.add('hidden'); return; }
+        section.classList.remove('hidden');
+        host.innerHTML = '';
+        prioritized.forEach(p => {
+            const cfg = PRIORITY_CONFIG[p.resume_priority] || PRIORITY_CONFIG[2];
+            const nameNode = p.html_url
+                ? `<a href="${ZL.escapeHtml(p.html_url)}" target="_blank" rel="noopener" class="hover:text-primary transition-colors">${ZL.escapeHtml(p.name)}</a>`
+                : ZL.escapeHtml(p.name);
+            const card = document.createElement('div');
+            card.className = 'bg-surface-container-low rounded-xl p-5 ghost-border relative overflow-hidden';
+            card.innerHTML = `
+                <div class="flex items-center justify-between mb-3">
+                    <span class="inline-flex items-center gap-1 px-2 py-1 rounded border ${cfg.tone} text-[10px] font-bold uppercase tracking-widest">
+                        <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">${cfg.icon}</span>
+                        ${cfg.label}
+                    </span>
+                    <span class="text-xs text-on-surface-variant">${ZL.escapeHtml(p.language || '--')}</span>
+                </div>
+                <h3 class="text-base font-semibold text-on-surface mb-2 truncate">${nameNode}</h3>
+                <p class="text-xs text-on-surface-variant leading-relaxed line-clamp-3">${ZL.escapeHtml(p.resume_why || '')}</p>`;
+            host.appendChild(card);
+        });
+    }
+
     function renderCards(list) {
         const host = $('zl-project-grid');
         if (!host) return;
@@ -99,6 +136,7 @@
             if (sub) sub.textContent = `Evaluating architectural integrity across ${data.repos_summary.total} repositories.`;
 
             renderFeatured(p.featured);
+            renderResumeRail(p.list);
             renderCards(p.list);
         } catch (err) {
             console.error('[ZeroLabs] projects failed:', err);

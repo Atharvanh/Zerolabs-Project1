@@ -142,6 +142,8 @@ const analysisSchema = {
                             icon: { type: 'string' },
                             score: { type: 'integer' },
                             html_url: { type: 'string' },
+                            resume_priority: { type: 'integer' },
+                            resume_why: { type: 'string' },
                             badges: {
                                 type: 'array',
                                 items: {
@@ -154,7 +156,7 @@ const analysisSchema = {
                                 }
                             }
                         },
-                        required: ['name', 'language', 'icon', 'score', 'badges']
+                        required: ['name', 'language', 'icon', 'score', 'badges', 'resume_priority', 'resume_why']
                     }
                 }
             },
@@ -309,7 +311,7 @@ Return ONE JSON object with these top-level keys: dashboard, skill_graph, projec
 
 ### projects
 - featured: the strongest repo { name, description (<= 240 chars, rewrite if missing), language, score 0-100 based on stars/activity/quality signals, html_url, badges: 2-3 short labels }
-- list: up to 6 items { name, language, icon (material symbol fitting the language: "data_object" python, "javascript" js/ts, "memory" rust/c, "terminal" go/shell, "cloud" yaml, "neurology" ml), score 0-100, html_url, badges: 2 items each with label + tone ("positive"|"warning"|"neutral") }
+- list: up to 6 items { name, language, icon (material symbol fitting the language: "data_object" python, "javascript" js/ts, "memory" rust/c, "terminal" go/shell, "cloud" yaml, "neurology" ml), score 0-100, html_url, badges: 2 items each with label + tone ("positive"|"warning"|"neutral"), resume_priority (1|2|3: 1 = lead-with on resume, 2 = strong supporting, 3 = background only; AT LEAST 1 item MUST be priority 1 and no more than 2 items may share priority 1), resume_why (one short sentence, <= 110 chars, explaining to a hiring manager why this project is worth putting first — cite a concrete signal like scale, stars, domain, architectural complexity, or demonstrated technique) }
 
 ### roadmap
 - target_role: one concrete next role (e.g. "Senior Frontend Engineer", "ML Platform Engineer")

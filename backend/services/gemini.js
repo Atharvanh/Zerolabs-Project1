@@ -30,7 +30,8 @@ export async function gemini(prompt, {
         contents: [{ role: 'user', parts: [{ text: prompt }] }],
         generationConfig: {
             temperature,
-            maxOutputTokens: 8192
+            maxOutputTokens: 32768,
+            thinkingConfig: { thinkingBudget: 0 }
         }
     };
 
@@ -46,6 +47,8 @@ export async function gemini(prompt, {
     const url = `${GEMINI_BASE}/${model}:generateContent?key=${KEY}`;
 
     let attempt = 0;
+    let sawRateLimit = false;
+    let lastRateLimitWait = 0;
     while (attempt < 3) {
         attempt++;
         const res = await fetch(url, {
@@ -56,7 +59,12 @@ export async function gemini(prompt, {
 
         if (res.status === 429) {
             // Rate limited — wait and retry
-            const wait = attempt * 2000;
+            const retryAfter = Number(res.headers.get('retry-after'));
+            const wait = Number.isFinite(retryAfter) && retryAfter > 0
+                ? retryAfter * 1000
+                : attempt * 2000;
+            sawRateLimit = true;
+            lastRateLimitWait = wait;
             console.warn(`⏳ Gemini rate-limited, waiting ${wait}ms then retrying...`);
             await sleep(wait);
             continue;
@@ -68,22 +76,35 @@ export async function gemini(prompt, {
         }
 
         const data = await res.json();
-        const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+        const candidate = data?.candidates?.[0];
+        const text = candidate?.content?.parts?.[0]?.text;
         if (!text) {
-            throw new Error(`Gemini returned no text. Finish reason: ${data?.candidates?.[0]?.finishReason}`);
+            throw new Error(`Gemini returned no text. Finish reason: ${candidate?.finishReason}`);
         }
 
         if (json) {
             try {
                 return JSON.parse(text);
             } catch (e) {
-                // Sometimes Gemini wraps JSON in ```json ... ``` — strip that
                 const cleaned = text.replace(/^```json\s*/i, '').replace(/```\s*$/, '').trim();
-                return JSON.parse(cleaned);
+                try {
+                    return JSON.parse(cleaned);
+                } catch (e2) {
+                    const reason = candidate?.finishReason;
+                    if (reason === 'MAX_TOKENS') {
+                        throw new Error(`Gemini output was truncated (finishReason=MAX_TOKENS). Response was ${text.length} chars. Raise maxOutputTokens or shrink the schema.`);
+                    }
+                    throw new Error(`Gemini JSON parse failed (finishReason=${reason}): ${e2.message}`);
+                }
             }
         }
 
         return text;
+    }
+
+    if (sawRateLimit) {
+        const seconds = Math.max(2, Math.ceil(lastRateLimitWait / 1000));
+        throw new Error(`Gemini rate limited. Please retry in ${seconds}s.`);
     }
 
     throw new Error('Gemini: exhausted retries');

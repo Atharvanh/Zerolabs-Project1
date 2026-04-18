@@ -12,6 +12,7 @@ import cors from 'cors';
 
 import githubRoutes from './routes/github.js';
 import analyzeRoutes from './routes/analyze.js';
+import auditRoutes from './routes/audit.js';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -50,6 +51,7 @@ app.get('/api/health', (_req, res) => {
 
 app.use('/api/github', githubRoutes);
 app.use('/api/analyze', analyzeRoutes);
+app.use('/api/audit', auditRoutes);
 
 // --- Error handler ----------------------------------------------------
 app.use((err, _req, res, _next) => {

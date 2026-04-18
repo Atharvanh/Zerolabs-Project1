@@ -44,12 +44,50 @@
         .glass-card { background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.1); }
         .text-gradient { background: linear-gradient(90deg, #4F46E5, #4edea3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .bg-gradient-hero { background: radial-gradient(circle at top right, rgba(79, 70, 229, 0.08), transparent 40%), radial-gradient(circle at bottom left, rgba(78, 222, 163, 0.08), transparent 40%); }
+        #zl-loader-overlay { display: none; }
+        #zl-loader-overlay.is-active { display: flex; }
+        .zl-stage-row { transition: color 0.3s ease, opacity 0.3s ease; }
+        .zl-stage-row[data-state="done"] { opacity: 1; color: #4edea3; }
+        .zl-stage-row[data-state="active"] { opacity: 1; color: #ffffff; }
+        .zl-stage-row[data-state="pending"] { opacity: 0.35; color: #a1a1aa; }
+        @keyframes zl-spin { to { transform: rotate(360deg); } }
+        .zl-spin { animation: zl-spin 1s linear infinite; transform-origin: 50% 50%; }
     </style>
 <link rel="stylesheet" href="interactions.css">
 <link rel="stylesheet" href="transitions.css">
 </head>
 <body class="antialiased min-h-screen flex flex-col relative bg-[#01030d]">
 <div id="canvas-container"></div>
+<!-- Loader overlay shown while backend fetch is in-flight -->
+<div id="zl-loader-overlay" class="fixed inset-0 z-[100] items-center justify-center bg-black/90 backdrop-blur-md">
+  <div class="glass-card rounded-2xl p-10 max-w-md w-full mx-6 text-center">
+    <div class="text-gradient text-2xl font-bold tracking-tight mb-1">ZeroLabs</div>
+    <div id="zl-loader-user" class="text-[10px] uppercase tracking-[0.25em] text-on-surface-variant mb-8">Initializing</div>
+    <svg class="w-14 h-14 mx-auto mb-8" viewBox="0 0 50 50">
+      <circle cx="25" cy="25" r="20" fill="none" stroke="#1f1f2b" stroke-width="4"></circle>
+      <circle class="zl-spin" cx="25" cy="25" r="20" fill="none" stroke="#4edea3" stroke-width="4" stroke-linecap="round" stroke-dasharray="90 200"></circle>
+    </svg>
+    <ul id="zl-loader-stages" class="text-left text-sm space-y-3">
+      <li data-stage="profile" data-state="pending" class="zl-stage-row flex items-center gap-3">
+        <span class="material-symbols-outlined text-base">radio_button_unchecked</span>
+        <span>Fetching GitHub profile</span>
+      </li>
+      <li data-stage="repos" data-state="pending" class="zl-stage-row flex items-center gap-3">
+        <span class="material-symbols-outlined text-base">radio_button_unchecked</span>
+        <span>Scanning repositories</span>
+      </li>
+      <li data-stage="lang" data-state="pending" class="zl-stage-row flex items-center gap-3">
+        <span class="material-symbols-outlined text-base">radio_button_unchecked</span>
+        <span>Aggregating language breakdown</span>
+      </li>
+      <li data-stage="ai" data-state="pending" class="zl-stage-row flex items-center gap-3">
+        <span class="material-symbols-outlined text-base">radio_button_unchecked</span>
+        <span>Running AI analysis</span>
+      </li>
+    </ul>
+    <p class="text-[10px] text-on-surface-variant mt-6 opacity-60">This usually takes 5–15 seconds on a cold cache.</p>
+  </div>
+</div>
 <!-- TopAppBar -->
 <nav class="fixed top-0 w-full z-50 backdrop-blur-xl border-b-0 shadow-[0_20px_40px_rgba(0,0,0,0.4)] bg-black/80">
 <div class="flex items-center justify-between px-6 h-16 w-full max-w-7xl mx-auto">
@@ -85,6 +123,18 @@
 <button id="gh-analyze-btn" type="button" class="bg-gradient-to-r from-primary to-primary-container text-on-primary-container font-semibold py-3 px-6 rounded text-sm tracking-wide shadow-[0_0_20px_rgba(173,198,255,0.2)] hover:shadow-[0_0_30px_rgba(173,198,255,0.4)] transition-all">Analyze Profile</button>
 </div>
 <p id="gh-input-error" class="text-xs text-red-400 mt-2 hidden"></p>
+<!-- Optional claim textarea -->
+<div class="mt-4">
+  <button id="gh-claim-toggle" type="button" class="flex items-center gap-1 text-xs text-on-surface-variant hover:text-on-surface transition-colors">
+    <span id="gh-claim-chevron" class="material-symbols-outlined text-sm">expand_more</span>
+    <span>Add a claim for the 360 audit (optional)</span>
+  </button>
+  <div id="gh-claim-wrap" class="hidden mt-3 text-left">
+    <label class="block text-[10px] uppercase tracking-[0.2em] text-on-surface-variant mb-2" for="gh-claim">How would you describe yourself?</label>
+    <textarea id="gh-claim" rows="3" class="w-full bg-black/40 glass-card rounded-lg p-3 text-sm text-on-surface placeholder:text-outline/60 focus:ring-1 focus:ring-primary focus:border-primary outline-none resize-y" placeholder="e.g. Full-stack engineer, 4 years of React + Node, built 3 production apps with Postgres and Stripe."></textarea>
+    <p class="text-[10px] text-on-surface-variant mt-2 opacity-60">We'll cross-reference this against your real code and surface contradictions.</p>
+  </div>
+</div>
 </div>
 <p class="text-xs text-on-surface-variant mt-4 opacity-60">Join 10,000+ top-tier engineers already analyzed.</p>
 </div>
@@ -128,6 +178,7 @@
 <script src="mesh-wave.js"></script>
 <script src="interactions.js"></script>
 <script src="transitions.js"></script>
+<script src="zl-api.js"></script>
 <script>
 (function () {
     function extractUsername(raw) {
@@ -143,8 +194,84 @@
     const input = document.getElementById('gh-input');
     const btn = document.getElementById('gh-analyze-btn');
     const errEl = document.getElementById('gh-input-error');
+    const overlay = document.getElementById('zl-loader-overlay');
+    const overlayUser = document.getElementById('zl-loader-user');
+    const claimInput = document.getElementById('gh-claim');
+    const claimToggle = document.getElementById('gh-claim-toggle');
+    const claimWrap = document.getElementById('gh-claim-wrap');
+    const claimChevron = document.getElementById('gh-claim-chevron');
 
-    function go() {
+    if (claimToggle) {
+        claimToggle.addEventListener('click', () => {
+            const open = claimWrap.classList.toggle('hidden') === false;
+            if (claimChevron) claimChevron.textContent = open ? 'expand_less' : 'expand_more';
+            if (open) claimInput?.focus();
+        });
+    }
+
+    try {
+        const savedClaim = sessionStorage.getItem('zl:claim') || '';
+        if (savedClaim && claimInput) {
+            claimInput.value = savedClaim;
+            claimWrap?.classList.remove('hidden');
+            if (claimChevron) claimChevron.textContent = 'expand_less';
+        }
+    } catch {}
+
+    const STAGES = ['profile', 'repos', 'lang', 'ai'];
+    const STAGE_DELAYS = [0, 1400, 2800, 4600];
+    let stageTimers = [];
+
+    function setStage(name, state) {
+        const row = document.querySelector(`#zl-loader-stages [data-stage="${name}"]`);
+        if (!row) return;
+        row.setAttribute('data-state', state);
+        const icon = row.querySelector('.material-symbols-outlined');
+        if (!icon) return;
+        if (state === 'done') icon.textContent = 'check_circle';
+        else if (state === 'active') icon.textContent = 'progress_activity';
+        else icon.textContent = 'radio_button_unchecked';
+    }
+
+    function resetStages() {
+        clearStageTimers();
+        STAGES.forEach(s => setStage(s, 'pending'));
+    }
+
+    function clearStageTimers() {
+        stageTimers.forEach(id => clearTimeout(id));
+        stageTimers = [];
+    }
+
+    function runStageChoreography() {
+        resetStages();
+        STAGES.forEach((stage, i) => {
+            stageTimers.push(setTimeout(() => {
+                if (i > 0) setStage(STAGES[i - 1], 'done');
+                setStage(stage, 'active');
+            }, STAGE_DELAYS[i]));
+        });
+    }
+
+    function completeAllStages() {
+        clearStageTimers();
+        STAGES.forEach(s => setStage(s, 'done'));
+    }
+
+    function showLoader(user) {
+        overlayUser.textContent = `Analyzing @${user}`;
+        overlay.classList.add('is-active');
+        document.body.style.overflow = 'hidden';
+        runStageChoreography();
+    }
+
+    function hideLoader() {
+        overlay.classList.remove('is-active');
+        document.body.style.overflow = '';
+        clearStageTimers();
+    }
+
+    async function go() {
         const user = extractUsername(input.value);
         if (!/^[a-zA-Z0-9]([a-zA-Z0-9-]{0,38})$/.test(user)) {
             errEl.textContent = 'Enter a valid GitHub username (e.g. github.com/torvalds).';
@@ -152,7 +279,30 @@
             return;
         }
         errEl.classList.add('hidden');
-        window.location.href = `dashboard.html?u=${encodeURIComponent(user)}`;
+        btn.disabled = true;
+        input.disabled = true;
+        try {
+            const claimVal = (claimInput?.value || '').trim();
+            if (claimVal) sessionStorage.setItem('zl:claim', claimVal);
+            else sessionStorage.removeItem('zl:claim');
+        } catch {}
+        showLoader(user);
+        try {
+            await window.ZL.fetchAnalysis(user);
+            completeAllStages();
+            setTimeout(() => {
+                window.location.href = `dashboard.html?u=${encodeURIComponent(user)}`;
+            }, 250);
+        } catch (err) {
+            hideLoader();
+            btn.disabled = false;
+            input.disabled = false;
+            const msg = err && err.status === 404
+                ? `No GitHub user named "${user}".`
+                : (err && err.message) || 'Analysis failed. Please try again.';
+            errEl.textContent = msg;
+            errEl.classList.remove('hidden');
+        }
     }
 
     btn.addEventListener('click', go);
