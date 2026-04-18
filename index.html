@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ZeroLabs - Developer Career Intelligence</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap">
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap">
+  <script>document.documentElement.classList.add('zl-fonts-loading');</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "primary": "#4F46E5",
+          "background-light": "#000000",
+          "background-dark": "#000000",
+          "surface": "#000000",
+          "surface-container": "#0a0a0a",
+          "surface-container-high": "#121212",
+          "surface-container-highest": "#1a1a1a",
+          "on-background": "#f6f6f8",
+          "on-surface": "#ffffff",
+          "on-surface-variant": "#a1a1aa"
+        },
+        fontFamily: {
+          "display": ["Inter"]
+        },
+        borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+      },
+    },
+  }</script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #01030d; color: #f6f6f8; overflow-x: hidden; }
+        #canvas-container { width: 100vw; height: 100vh; display: block; position: fixed; top: 0; left: 0; z-index: 0; pointer-events: none; }
+        #canvas-container::after { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, transparent 35%, #01030d 120%); pointer-events: none; z-index: 1; }
+        .glass-card { background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .text-gradient { background: linear-gradient(90deg, #4F46E5, #4edea3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .bg-gradient-hero { background: radial-gradient(circle at top right, rgba(79, 70, 229, 0.08), transparent 40%), radial-gradient(circle at bottom left, rgba(78, 222, 163, 0.08), transparent 40%); }
+    </style>
+<link rel="stylesheet" href="interactions.css">
+<link rel="stylesheet" href="transitions.css">
+</head>
+<body class="antialiased min-h-screen flex flex-col relative bg-[#01030d]">
+<div id="canvas-container"></div>
+<!-- TopAppBar -->
+<nav class="fixed top-0 w-full z-50 backdrop-blur-xl border-b-0 shadow-[0_20px_40px_rgba(0,0,0,0.4)] bg-black/80">
+<div class="flex items-center justify-between px-6 h-16 w-full max-w-7xl mx-auto">
+<div class="flex items-center gap-2">
+<a href="index.html" class="text-xl font-bold tracking-tighter text-[#E5E2E1]"><span class="material-symbols-outlined text-[#4edea3] mr-1" style="vertical-align: bottom; font-size: 1.1em;">bolt</span>ZeroLabs</a>
+</div>
+<div class="flex items-center gap-4">
+<!-- Hiding standard trailing actions for a landing page, prioritizing main CTA -->
+</div>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="flex-grow flex flex-col items-center justify-start pt-8 pb-24 px-6 relative z-10">
+<!-- Hero Section -->
+<div class="max-w-4xl w-full text-center space-y-8 flex flex-col items-center">
+<div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-card text-xs font-semibold tracking-wider text-on-surface-variant mb-4 border border-outline-variant/20">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span>V2.0 INTELLIGENCE ENGINE LIVE</span>
+</div>
+<h1 class="text-5xl md:text-7xl font-bold tracking-tighter leading-tight text-on-surface">
+                Know Your Real <br/>
+<span class="text-gradient">Developer Skill Level</span>
+</h1>
+<p class="text-lg md:text-xl text-on-surface-variant max-w-2xl font-medium">
+                AI-powered GitHub analysis to unlock your career potential. Stop guessing, start measuring your true engineering velocity.
+            </p>
+<!-- Input Area -->
+<div class="w-full max-w-lg mt-12 relative group">
+<div class="absolute -inset-1 bg-gradient-to-r from-primary to-primary-container rounded-lg blur opacity-25 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
+<div class="relative flex items-center glass-card rounded-lg p-2 bg-black/40">
+<span class="material-symbols-outlined text-outline ml-3">code</span>
+<input class="flex-grow bg-transparent border-none text-on-surface focus:ring-0 placeholder:text-outline/60 text-lg px-4" placeholder="github.com/username" type="text"/>
+<a href="dashboard.html"  class="bg-gradient-to-r from-primary to-primary-container text-on-primary-container font-semibold py-3 px-6 rounded text-sm tracking-wide shadow-[0_0_20px_rgba(173,198,255,0.2)] hover:shadow-[0_0_30px_rgba(173,198,255,0.4)] transition-all">Analyze Profile</a>
+</div>
+</div>
+<p class="text-xs text-on-surface-variant mt-4 opacity-60">Join 10,000+ top-tier engineers already analyzed.</p>
+</div>
+<!-- Bento Grid Teaser (Optional based on typical landing page flow) -->
+<div class="max-w-6xl w-full mt-32 grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="glass-card rounded-xl p-8 flex flex-col gap-4 relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-10">
+<span class="material-symbols-outlined text-6xl">insights</span>
+</div>
+<h3 class="text-xl font-semibold text-on-surface z-10">Atmospheric Analysis</h3>
+<p class="text-sm text-on-surface-variant z-10">Deep dive into code quality, not just commit volume.</p>
+</div>
+<div class="glass-card rounded-xl p-8 flex flex-col gap-4 relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-10">
+<span class="material-symbols-outlined text-6xl">timeline</span>
+</div>
+<h3 class="text-xl font-semibold text-on-surface z-10">Velocity Tracking</h3>
+<p class="text-sm text-on-surface-variant z-10">Measure your true output speed against industry benchmarks.</p>
+</div>
+<div class="glass-card rounded-xl p-8 flex flex-col gap-4 relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-10">
+<span class="material-symbols-outlined text-6xl">workspace_premium</span>
+</div>
+<h3 class="text-xl font-semibold text-on-surface z-10">Skill Topography</h3>
+<p class="text-sm text-on-surface-variant z-10">Map your technical expertise across complex tech stacks.</p>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full py-12 border-t border-[#464555]/20 z-10 relative bg-black">
+<div class="max-w-7xl mx-auto px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+<p class="font-['Inter'] text-xs uppercase tracking-widest text-[#C7C4D8]">© 2024 ZeroLabs. Atmospheric Career Intelligence for Developers.</p>
+<div class="flex gap-6">
+<a class="font-['Inter'] text-xs uppercase tracking-widest text-[#C7C4D8] hover:text-[#ADC6FF] transition-colors underline-offset-4 hover:underline" href="#">Documentation</a>
+<a class="font-['Inter'] text-xs uppercase tracking-widest text-[#C7C4D8] hover:text-[#ADC6FF] transition-colors underline-offset-4 hover:underline" href="#">Privacy</a>
+<a class="font-['Inter'] text-xs uppercase tracking-widest text-[#C7C4D8] hover:text-[#ADC6FF] transition-colors underline-offset-4 hover:underline" href="#">API Status</a>
+<a class="font-['Inter'] text-xs uppercase tracking-widest text-[#C7C4D8] hover:text-[#ADC6FF] transition-colors underline-offset-4 hover:underline" href="#">GitHub</a>
+</div>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="mesh-wave.js"></script>
+<script src="interactions.js"></script>
+<script src="transitions.js"></script>
+</body></html>
+
+
+
+
+

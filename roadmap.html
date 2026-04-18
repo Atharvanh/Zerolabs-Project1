@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>ZeroLabs - 90-Day Roadmap</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap">
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap">
+    <script>document.documentElement.classList.add('zl-fonts-loading');</script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline-variant": "#464555",
+                        "on-secondary-fixed": "#23005c",
+                        "surface-container-lowest": "#0e0e0e",
+                        "tertiary-container": "#006e4b",
+                        "primary-fixed-dim": "#adc6ff",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "on-secondary-container": "#c4abff",
+                        "inverse-on-surface": "#313030",
+                        "surface-variant": "#353534",
+                        "surface-container-highest": "#353534",
+                        "error-container": "#93000a",
+                        "tertiary-fixed": "#6ffbbe",
+                        "outline": "#918fa1",
+                        "on-primary-fixed-variant": "#004395",
+                        "on-primary-fixed": "#001a42",
+                        "on-primary": "#002e6a",
+                        "background": "#131313",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "surface-container-high": "#2a2a2a",
+                        "on-tertiary-fixed": "#002113",
+                        "primary-container": "#005cc6",
+                        "on-primary-container": "#cddbff",
+                        "surface-bright": "#3a3939",
+                        "on-tertiary": "#003824",
+                        "on-error-container": "#ffdad6",
+                        "on-background": "#e5e2e1",
+                        "secondary-fixed": "#e9ddff",
+                        "surface-dim": "#131313",
+                        "primary-fixed": "#d8e2ff",
+                        "secondary-fixed-dim": "#d0bcff",
+                        "primary": "#adc6ff",
+                        "inverse-primary": "#005ac2",
+                        "on-surface-variant": "#c7c4d8",
+                        "on-surface": "#e5e2e1",
+                        "inverse-surface": "#e5e2e1",
+                        "surface-container-low": "#1c1b1b",
+                        "surface-container": "#201f1f",
+                        "tertiary": "#4edea3",
+                        "on-secondary-fixed-variant": "#5516be",
+                        "on-secondary": "#3c0091",
+                        "secondary-container": "#571bc1",
+                        "secondary": "#d0bcff",
+                        "error": "#ffb4ab",
+                        "surface-tint": "#adc6ff",
+                        "on-tertiary-container": "#67f4b7",
+                        "on-error": "#690005",
+                        "surface": "#131313"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {},
+                    "fontFamily": {
+                        "headline": [
+                            "Inter"
+                        ],
+                        "body": [
+                            "Inter"
+                        ],
+                        "label": [
+                            "Inter"
+                        ]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #131313;
+            color: #e5e2e1;
+        }
+
+        .glass-card {
+            background-color: rgba(28, 27, 27, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(70, 69, 85, 0.15);
+        }
+
+        .primary-gradient-text {
+            background: linear-gradient(to right, #adc6ff, #005cc6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .primary-gradient-bg {
+            background: linear-gradient(to right, #adc6ff, #005cc6);
+        }
+
+        .ambient-shadow {
+            box-shadow: 0 20px 40px rgba(14, 14, 14, 0.4);
+        }
+    </style>
+    <link rel="stylesheet" href="zerolabs.css">
+    <link rel="stylesheet" href="transitions.css">
+</head>
+
+<body class="bg-background text-on-surface antialiased min-h-screen flex flex-col md:flex-row">
+    <!-- TopAppBar (Mobile) -->
+    <header
+        class="md:hidden fixed top-0 w-full z-50 bg-[#131313]/60 backdrop-blur-xl bg-[#1C1B1B] shadow-[0_20px_40px_rgba(0,0,0,0.4)] flex items-center justify-between px-6 h-16">
+        <div class="text-xl font-bold tracking-tighter text-[#E5E2E1] font-['Inter'] antialiased tracking-tight"><span
+                class="material-symbols-outlined text-[#4edea3] mr-1"
+                style="vertical-align: bottom; font-size: 1.1em;">bolt</span>ZeroLabs</div>
+        <div class="flex items-center gap-4 text-[#ADC6FF]">
+            <button
+                class="hover:text-[#ADC6FF] hover:bg-white/5 transition-all active:scale-95 duration-200 p-2 rounded-full">
+                <span class="material-symbols-outlined">notifications</span>
+            </button>
+            <button
+                class="hover:text-[#ADC6FF] hover:bg-white/5 transition-all active:scale-95 duration-200 p-2 rounded-full">
+                <span class="material-symbols-outlined">settings</span>
+            </button>
+            <img alt="Developer Profile Avatar" class="w-8 h-8 rounded-full border border-outline-variant/20"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCq_dnHUE0F_A91YAnPjWBRy-IVKeLI1ypeyQcDzxHI1SSUYjVv3NWFW3-qvQCXaBkicbW3_vzdL8xmkdr3ARQZVICQB6rScS0g_c1rsynIcZJQLE4MfdZRH-X_3iGpb1aE6BwB1MnmqNORcfmCiAFUqXz_jXnhjSb46fy0KHYLs_eGStGb_tpW3DHEQdNh6D2LiE9BVBdVgWA1lDwi7qPf_FJSpXZiU-5aBKmD8KRXTA8c5EsqpogNNIT-qO0kADGKxn5u2rP680A" />
+        </div>
+    </header>
+    <!-- SideNavBar (Desktop) -->
+    <nav
+        class="bg-[#1C1B1B] font-['Inter'] text-sm font-medium h-screen w-64 hidden md:flex flex-col bg-[#131313] flat no-border fixed left-0 top-0 pt-20 pb-8 px-4 space-y-2 z-40 border-r border-outline-variant/10">
+        <div class="mb-8 px-4">
+            <div class="flex items-center gap-3 mb-6">
+                <img alt="User Avatar" class="w-10 h-10 rounded-full border border-outline-variant/20"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnDwJ5c3Ldn-jmTVY_JUJmng8db5T3bubUi9Xk-e-yogDxrmxQxUqFStgx6ovJszObWpDDZvDx7GsM0i_7V7UbaLScYmhmuGnXgENiF23doNwcBRshR_M3DJVQ5Qzfiqb5rz--k7ZGvuF09hD1YSYYuGEaxKNF10rNOxM2nPL35MIew4W8kT8ECGHDOp3WcWuVC-_tBFLL1_N7k4h2MlKbhLfoOPjOa6u0SbQ-7iBFMmksfgefzrOv458gov-oIkY-hOtO0efJPxE" />
+                <div>
+                    <div class="text-on-surface font-semibold text-sm">Developer Intelligence</div>
+                    <div class="text-on-surface-variant text-xs">Career Velocity: 84%</div>
+                </div>
+            </div>
+            <button
+                class="w-full py-2 px-4 rounded primary-gradient-bg text-on-primary font-semibold hover:shadow-[0_0_15px_rgba(173,198,255,0.2)] transition-shadow cursor-pointer transition-all">
+                Analyze New Repo
+            </button>
+        </div>
+        <div class="flex-1 space-y-2">
+            <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-[#C7C4D8] hover:bg-[#2A2A2A]/50 hover:translate-x-1 transition-transform duration-300 cursor-pointer transition-all"
+                href="dashboard.html">
+                <span class="material-symbols-outlined">insights</span>
+                Intelligence
+            </a>
+            <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-[#C7C4D8] hover:bg-[#2A2A2A]/50 hover:translate-x-1 transition-transform duration-300 cursor-pointer transition-all"
+                href="skill_graph.html">
+                <span class="material-symbols-outlined">monitoring</span>
+                Skill Graph
+            </a>
+            <a class="flex items-center gap-3 px-4 py-2 bg-[#2A2A2A] text-[#ADC6FF] rounded-lg shadow-[0_0_15px_rgba(173,198,255,0.1)] hover:translate-x-1 transition-transform duration-300 cursor-pointer transition-all"
+                href="roadmap.html">
+                <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">timeline</span>
+                Roadmap
+            </a>
+            <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-[#C7C4D8] hover:bg-[#2A2A2A]/50 hover:translate-x-1 transition-transform duration-300 cursor-pointer transition-all"
+                href="projects.html">
+                <span class="material-symbols-outlined">code</span>
+                Projects
+            </a>
+            <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-[#C7C4D8] hover:bg-[#2A2A2A]/50 hover:translate-x-1 transition-transform duration-300 cursor-pointer transition-all"
+                href="career_matches.html">
+                <span class="material-symbols-outlined">workspace_premium</span>
+                Career Matches
+            </a>
+        </div>
+        <!-- <div class="mt-auto space-y-2 pt-4 border-t border-outline-variant/10">
+<a class="flex items-center gap-3 px-4 py-2 rounded-lg text-[#C7C4D8] hover:bg-[#2A2A2A]/50 hover:translate-x-1 transition-transform duration-300 cursor-pointer transition-all" href="#">
+<span class="material-symbols-outlined">settings</span>
+                Settings
+            </a>
+<a class="flex items-center gap-3 px-4 py-2 rounded-lg text-[#C7C4D8] hover:bg-[#2A2A2A]/50 hover:translate-x-1 transition-transform duration-300 cursor-pointer transition-all" href="#">
+<span class="material-symbols-outlined">help</span>
+                Support
+            </a>
+</div> -->
+    </nav>
+    <!-- Main Content -->
+    <main class="flex-1 md:ml-64 pt-20 md:pt-8 px-6 md:px-12 pb-24 max-w-6xl mx-auto w-full">
+        <!-- Header & Progress -->
+        <div class="mb-12">
+            <h1 class="text-3xl md:text-[3.5rem] font-bold tracking-tight text-on-surface mb-2 leading-none">90-Day
+                Architecture Roadmap</h1>
+            <p class="text-on-surface-variant text-lg max-w-2xl mt-4">Structured progression toward Senior Frontend
+                Architect. Focus areas include React Server Components, Advanced State, and System Design.</p>
+            <div class="mt-8 glass-card p-6 rounded-xl relative overflow-hidden interactive-card">
+                <div class="absolute inset-0 bg-primary/5 blur-3xl rounded-full translate-y-1/2"></div>
+                <div class="relative z-10 flex justify-between items-end mb-4">
+                    <div>
+                        <div class="text-sm font-semibold text-on-surface-variant uppercase tracking-widest mb-1">
+                            Overall Velocity</div>
+                        <div class="text-3xl font-bold primary-gradient-text">34%</div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-sm text-on-surface-variant">Est. Completion</div>
+                        <div class="text-on-surface font-medium">Dec 15, 2024</div>
+                    </div>
+                </div>
+                <div
+                    class="w-full bg-surface-container-highest rounded-full h-2 mt-2 overflow-hidden border border-outline-variant/20 interactive-card">
+                    <div class="primary-gradient-bg h-2 rounded-full" style="width: 34%"></div>
+                </div>
+            </div>
+        </div>
+        <!-- Timeline / Stepper -->
+        <div class="relative pl-4 md:pl-8 border-l border-outline-variant/20 space-y-16">
+            <!-- Month 1 -->
+            <div class="relative">
+                <div
+                    class="absolute -left-5 md:-left-9 top-0 w-10 h-10 rounded-full bg-surface-container-high border-2 border-primary flex items-center justify-center z-10 shadow-[0_0_15px_rgba(173,198,255,0.2)] interactive-card">
+                    <span class="material-symbols-outlined text-primary text-sm"
+                        style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                </div>
+                <div class="ml-6 md:ml-10">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-2">
+                        <div>
+                            <h2 class="text-2xl font-semibold text-on-surface">Month 1: Foundation</h2>
+                            <p class="text-sm text-on-surface-variant mt-1">Core architectural concepts and modern
+                                rendering patterns.</p>
+                        </div>
+                        <span
+                            class="px-3 py-1 bg-primary/10 text-primary text-xs font-semibold rounded-full border border-primary/20 inline-flex items-center w-fit">
+                            In Progress
+                        </span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Task Card 1 -->
+                        <div
+                            class="glass-card p-5 rounded-lg hover:bg-surface-container-high transition-colors group cursor-pointer relative overflow-hidden interactive-card">
+                            <div
+                                class="absolute inset-0 bg-gradient-to-r from-transparent to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity">
+                            </div>
+                            <div class="relative z-10">
+                                <div class="flex justify-between items-start mb-3">
+                                    <h3
+                                        class="text-base font-medium text-on-surface group-hover:text-primary transition-colors">
+                                        Master React Server Components</h3>
+                                    <div class="flex items-center gap-2">
+                                        <span
+                                            class="text-xs text-on-surface-variant bg-surface px-2 py-1 rounded border border-outline-variant/20">15h</span>
+                                        <button class="text-primary hover:text-primary-container transition-colors">
+                                            <span class="material-symbols-outlined"
+                                                style="font-variation-settings: 'FILL' 1;">toggle_on</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <p class="text-sm text-on-surface-variant line-clamp-2">Deep dive into Next.js App
+                                    Router, caching strategies, and streaming SSR.</p>
+                            </div>
+                        </div>
+                        <!-- Task Card 2 -->
+                        <div
+                            class="glass-card p-5 rounded-lg hover:bg-surface-container-high transition-colors group cursor-pointer relative overflow-hidden interactive-card">
+                            <div
+                                class="absolute inset-0 bg-gradient-to-r from-transparent to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity">
+                            </div>
+                            <div class="relative z-10">
+                                <div class="flex justify-between items-start mb-3">
+                                    <h3
+                                        class="text-base font-medium text-on-surface group-hover:text-primary transition-colors">
+                                        Optimize SQL Queries</h3>
+                                    <div class="flex items-center gap-2">
+                                        <span
+                                            class="text-xs text-on-surface-variant bg-surface px-2 py-1 rounded border border-outline-variant/20">10h</span>
+                                        <button
+                                            class="text-outline-variant hover:text-on-surface-variant transition-colors">
+                                            <span class="material-symbols-outlined">toggle_off</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <p class="text-sm text-on-surface-variant line-clamp-2">Understand indexing, query
+                                    execution plans, and Prisma optimizations.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Month 2 -->
+            <div class="relative">
+                <div
+                    class="absolute -left-5 md:-left-9 top-0 w-10 h-10 rounded-full bg-surface-container-lowest border-2 border-outline-variant/50 flex items-center justify-center z-10 interactive-card">
+                    <span class="material-symbols-outlined text-outline-variant text-sm">lock</span>
+                </div>
+                <div class="ml-6 md:ml-10 opacity-60">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-2">
+                        <div>
+                            <h2 class="text-2xl font-semibold text-on-surface">Month 2: Deep Dive</h2>
+                            <p class="text-sm text-on-surface-variant mt-1">Advanced state management and performance
+                                tuning.</p>
+                        </div>
+                        <span
+                            class="px-3 py-1 bg-surface-container text-on-surface-variant text-xs font-semibold rounded-full border border-outline-variant/20 inline-flex items-center w-fit interactive-card">
+                            Upcoming
+                        </span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div
+                            class="bg-surface-container-low p-5 rounded-lg border border-outline-variant/10 interactive-card">
+                            <div class="flex justify-between items-start mb-3">
+                                <h3 class="text-base font-medium text-on-surface">Zustand &amp; Micro-states</h3>
+                                <span
+                                    class="text-xs text-on-surface-variant bg-surface px-2 py-1 rounded border border-outline-variant/20">12h</span>
+                            </div>
+                            <p class="text-sm text-on-surface-variant">Replacing Redux with atomic state management
+                                patterns.</p>
+                        </div>
+                        <div
+                            class="bg-surface-container-low p-5 rounded-lg border border-outline-variant/10 interactive-card">
+                            <div class="flex justify-between items-start mb-3">
+                                <h3 class="text-base font-medium text-on-surface">Web Vitals Optimization</h3>
+                                <span
+                                    class="text-xs text-on-surface-variant bg-surface px-2 py-1 rounded border border-outline-variant/20">20h</span>
+                            </div>
+                            <p class="text-sm text-on-surface-variant">Improving LCP, CLS, and FID across critical
+                                rendering paths.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Month 3 -->
+            <div class="relative">
+                <div
+                    class="absolute -left-5 md:-left-9 top-0 w-10 h-10 rounded-full bg-surface-container-lowest border-2 border-outline-variant/50 flex items-center justify-center z-10 interactive-card">
+                    <span class="material-symbols-outlined text-outline-variant text-sm">lock</span>
+                </div>
+                <div class="ml-6 md:ml-10 opacity-40">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-2">
+                        <div>
+                            <h2 class="text-2xl font-semibold text-on-surface">Month 3: Mastery</h2>
+                            <p class="text-sm text-on-surface-variant mt-1">System design and architectural leadership.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div
+                            class="bg-surface-container-low p-5 rounded-lg border border-outline-variant/10 interactive-card">
+                            <div class="flex justify-between items-start mb-3">
+                                <h3 class="text-base font-medium text-on-surface">Micro-frontend Architecture</h3>
+                                <span
+                                    class="text-xs text-on-surface-variant bg-surface px-2 py-1 rounded border border-outline-variant/20">25h</span>
+                            </div>
+                            <p class="text-sm text-on-surface-variant">Module federation and independent deployability.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- BottomNavBar (Mobile) -->
+    <nav
+        class="md:hidden fixed bottom-0 w-full bg-[#1C1B1B] border-t border-outline-variant/10 flex justify-around py-3 pb-6 z-50">
+        <a class="flex flex-col items-center gap-1 text-[#C7C4D8]" href="dashboard.html">
+            <span class="material-symbols-outlined">insights</span>
+            <span class="text-[0.6rem] font-medium uppercase tracking-wider">Intel</span>
+        </a>
+        <a class="flex flex-col items-center gap-1 text-[#ADC6FF] font-semibold" href="roadmap.html">
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">timeline</span>
+            <span class="text-[0.6rem] font-medium uppercase tracking-wider">Roadmap</span>
+        </a>
+        <a class="flex flex-col items-center gap-1 text-[#C7C4D8]" href="projects.html">
+            <span class="material-symbols-outlined">code</span>
+            <span class="text-[0.6rem] font-medium uppercase tracking-wider">Projects</span>
+        </a>
+    </nav>
+    <script src="zerolabs.js"></script>
+    <script src="transitions.js"></script>
+</body>
+
+</html>

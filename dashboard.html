@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+
+<head>
+        <meta charset="utf-8" />
+        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+        <title>ZeroLabs - Developer Career Intelligence System</title>
+        <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+        
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap">
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap">
+  <script>document.documentElement.classList.add('zl-fonts-loading');</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap"
+                rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+                rel="stylesheet" />
+        <script id="tailwind-config">
+                tailwind.config = {
+                        darkMode: "class",
+                        theme: {
+                                extend: {
+                                        "colors": {
+                                                "on-background": "#e5e2e1",
+                                                "on-secondary-fixed": "#23005c",
+                                                "tertiary-fixed": "#6ffbbe",
+                                                "on-tertiary-fixed-variant": "#005236",
+                                                "primary-container": "#005cc6",
+                                                "surface": "#131313",
+                                                "inverse-primary": "#005ac2",
+                                                "outline-variant": "#464555",
+                                                "surface-container": "#201f1f",
+                                                "tertiary": "#4edea3",
+                                                "on-primary-fixed": "#001a42",
+                                                "on-secondary-fixed-variant": "#5516be",
+                                                "primary-fixed": "#d8e2ff",
+                                                "surface-container-high": "#2a2a2a",
+                                                "inverse-on-surface": "#313030",
+                                                "primary-fixed-dim": "#adc6ff",
+                                                "tertiary-container": "#006e4b",
+                                                "on-tertiary-container": "#67f4b7",
+                                                "surface-container-low": "#1c1b1b",
+                                                "background": "#131313",
+                                                "secondary-fixed": "#e9ddff",
+                                                "on-primary": "#002e6a",
+                                                "on-primary-container": "#cddbff",
+                                                "surface-container-highest": "#353534",
+                                                "surface-bright": "#3a3939",
+                                                "error": "#ffb4ab",
+                                                "surface-variant": "#353534",
+                                                "on-primary-fixed-variant": "#004395",
+                                                "secondary-container": "#571bc1",
+                                                "primary": "#adc6ff",
+                                                "outline": "#918fa1",
+                                                "error-container": "#93000a",
+                                                "inverse-surface": "#e5e2e1",
+                                                "on-surface": "#e5e2e1",
+                                                "on-tertiary": "#003824",
+                                                "secondary": "#d0bcff",
+                                                "surface-dim": "#131313",
+                                                "on-error-container": "#ffdad6",
+                                                "on-secondary-container": "#c4abff",
+                                                "on-tertiary-fixed": "#002113",
+                                                "surface-container-lowest": "#0e0e0e",
+                                                "tertiary-fixed-dim": "#4edea3",
+                                                "on-secondary": "#3c0091",
+                                                "surface-tint": "#adc6ff",
+                                                "secondary-fixed-dim": "#d0bcff",
+                                                "on-surface-variant": "#c7c4d8",
+                                                "on-error": "#690005"
+                                        },
+                                        "borderRadius": {
+                                                "DEFAULT": "0.25rem",
+                                                "lg": "0.5rem",
+                                                "xl": "0.75rem",
+                                                "full": "9999px"
+                                        },
+                                        "spacing": {},
+                                        "fontFamily": {
+                                                "headline": ["Inter"],
+                                                "body": ["Inter"],
+                                                "label": ["Inter"]
+                                        }
+                                },
+                        },
+                }
+        </script>
+        <style>
+                body {
+                        font-family: 'Inter', sans-serif;
+                }
+        </style>
+
+        <link rel="stylesheet" href="zerolabs.css">
+        <link rel="stylesheet" href="transitions.css">
+</head>
+
+<body
+        class="bg-background text-on-surface antialiased min-h-screen selection:bg-primary-container selection:text-on-primary-container">
+        <!-- TopAppBar -->
+        <header
+                class="fixed top-0 w-full z-50 bg-[#131313]/60 backdrop-blur-xl border-b border-[#1C1B1B] shadow-[0_20px_40px_rgba(0,0,0,0.4)]">
+                <div class="flex items-center justify-between px-6 h-16 w-full max-w-[1920px] mx-auto">
+                        <div class="flex items-center gap-4 md:pl-[17rem]">
+                                <span
+                                        class="text-xl font-bold tracking-tighter text-[#E5E2E1] font-['Inter'] antialiased tracking-tight"><span
+                                                class="material-symbols-outlined text-[#4edea3] mr-1"
+                                                style="vertical-align: bottom; font-size: 1.1em;">bolt</span>ZeroLabs</span>
+                        </div>
+                        <div class="flex items-center gap-6">
+                                <!-- Search -->
+                                <div class="hidden md:flex relative group">
+                                        <span
+                                                class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
+                                        <input class="bg-surface-container-highest/50 border outline-variant/20 rounded-lg pl-10 pr-4 py-2 text-sm text-on-surface focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-all w-64 placeholder-on-surface-variant/50 backdrop-blur-sm interactive-card"
+                                                placeholder="Search insights..." type="text" />
+                                </div>
+                                <div class="flex items-center gap-4 text-[#C7C4D8]">
+                                        <button
+                                                class="hover:text-[#ADC6FF] hover:bg-white/5 transition-all p-2 rounded-full active:scale-95 duration-200">
+                                                <span class="material-symbols-outlined"
+                                                        style="font-variation-settings: 'FILL' 0;">notifications</span>
+                                        </button>
+                                        <button
+                                                class="hover:text-[#ADC6FF] hover:bg-white/5 transition-all p-2 rounded-full active:scale-95 duration-200">
+                                                <span class="material-symbols-outlined"
+                                                        style="font-variation-settings: 'FILL' 0;">settings</span>
+                                        </button>
+                                        <div
+                                                class="w-8 h-8 rounded-full bg-gradient-to-tr from-primary to-secondary overflow-hidden ml-2 border border-outline-variant/30">
+                                                <img alt="Developer Profile Avatar"
+                                                        class="w-full h-full object-cover mix-blend-overlay opacity-80"
+                                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQMr8Bs8pG23Tl15lCe8yqUdu1ZcJAfrCPpG-0Ei63ZsSmxRalQoyDgGOT1itgD6uWZkoFI86G2_Nh1R2HLYd2XQryu8sMFyf_gHKC2DqEZ4gddgFVia8E7tiZXuEBsiQyqljAZi3DuxZZ-gEKAv7Mmw5aBEkSyEMIL1k83U-Iqx8iUOizVP4ltE3DALTwbGiQsJuWScqXqbz7cNmmq4xvypu78RX4sVa3-4ZRBepM_78bStuzVFWY_68zpOBed9W86CqWv5cJgBM" />
+                                        </div>
+                                </div>
+                        </div>
+                </div>
+        </header>
+        <!-- SideNavBar (Styled according to SCREEN_5) -->
+        <nav
+                class="bg-[#1C1B1B] text-[#ADC6FF] font-['Inter'] text-sm font-medium fixed left-0 top-0 pt-20 pb-8 px-4 space-y-2 h-screen w-64 hidden md:flex flex-col z-40">
+                <div class="mb-8 px-4">
+                        <div class="flex items-center gap-3 mb-6">
+                                <img alt="User Avatar"
+                                        class="w-10 h-10 rounded-full object-cover border border-outline-variant/20"
+                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnDwJ5c3Ldn-jmTVY_JUJmng8db5T3bubUi9Xk-e-yogDxrmxQxUqFStgx6ovJszObWpDDZvDx7GsM0i_7V7UbaLScYmhmuGnXgENiF23doNwcBRshR_M3DJVQ5Qzfiqb5rz--k7ZGvuF09hD1YSYYuGEaxKNF10rNOxM2nPL35MIew4W8kT8ECGHDOp3WcWuVC-_tBFLL1_N7k4h2MlKbhLfoOPjOa6u0SbQ-7iBFMmksfgefzrOv458gov-oIkY-hOtO0efJPxE" />
+                                <div>
+                                        <h2 class="text-on-surface font-semibold text-base leading-tight">Developer
+                                                Intelligence</h2>
+                                        <p class="text-on-surface-variant text-xs">Career Velocity: 84%</p>
+                                </div>
+                        </div>
+                        <button
+                                class="w-full bg-gradient-to-r from-primary to-primary-container text-on-primary font-semibold py-2 px-4 rounded hover:shadow-[0_0_15px_rgba(173,198,255,0.2)] transition-all flex items-center justify-center gap-2">
+                                <span class="material-symbols-outlined text-sm">add</span> Analyze New Repo
+                        </button>
+                </div>
+                <div class="flex-1 space-y-1">
+                        <a class="flex items-center gap-3 px-4 py-3 rounded-lg bg-[#2A2A2A] text-[#ADC6FF] shadow-[0_0_15px_rgba(173,198,255,0.1)] hover:translate-x-1 transition-transform duration-300 cursor-pointer transition-all"
+                                href="dashboard.html">
+                                <span class="material-symbols-outlined"
+                                        style="font-variation-settings: 'FILL' 1;">insights</span> Intelligence
+                        </a>
+                        <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-[#C7C4D8] hover:bg-[#2A2A2A]/50 hover:translate-x-1 transition-transform duration-300 cursor-pointer transition-all"
+                                href="skill_graph.html">
+                                <span class="material-symbols-outlined">monitoring</span> Skill Graph
+                        </a>
+                        <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-[#C7C4D8] hover:bg-[#2A2A2A]/50 hover:translate-x-1 transition-transform duration-300 cursor-pointer transition-all"
+                                href="roadmap.html">
+                                <span class="material-symbols-outlined">timeline</span> Roadmap
+                        </a>
+                        <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-[#C7C4D8] hover:bg-[#2A2A2A]/50 hover:translate-x-1 transition-transform duration-300 cursor-pointer transition-all"
+                                href="projects.html">
+                                <span class="material-symbols-outlined">code</span> Projects
+                        </a>
+                        <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-[#C7C4D8] hover:bg-[#2A2A2A]/50 hover:translate-x-1 transition-transform duration-300 cursor-pointer transition-all"
+                                href="career_matches.html">
+                                <span class="material-symbols-outlined">workspace_premium</span> Career Matches
+                        </a>
+                </div>
+                <!-- <div class="mt-auto space-y-1 pt-4 border-t border-outline-variant/10">
+<a class="flex items-center gap-3 px-4 py-2 rounded-lg text-[#C7C4D8] hover:bg-[#2A2A2A]/50 hover:translate-x-1 transition-transform duration-300 cursor-pointer transition-all" href="#">
+<span class="material-symbols-outlined text-sm">settings</span> Settings
+        </a>
+<a class="flex items-center gap-3 px-4 py-2 rounded-lg text-[#C7C4D8] hover:bg-[#2A2A2A]/50 hover:translate-x-1 transition-transform duration-300 cursor-pointer transition-all" href="#">
+<span class="material-symbols-outlined text-sm">help</span> Support
+        </a>
+</div> -->
+        </nav>
+        <!-- Main Content -->
+        <main class="md:ml-64 pt-24 pb-20 px-4 md:px-8 max-w-[1600px] mx-auto min-h-screen">
+                <!-- Hero Section / Context -->
+                <div class="mb-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+                        <div>
+                                <h1
+                                        class="text-4xl md:text-5xl font-bold tracking-tight text-on-surface mb-2 font-['Inter']">
+                                        Intelligence Overview</h1>
+                                <p class="text-on-surface-variant text-sm md:text-base max-w-2xl">Atmospheric analysis
+                                        of your engineering velocity, skill distribution, and immediate career
+                                        trajectory based on recent commits.</p>
+                        </div>
+                        <div
+                                class="flex items-center gap-4 bg-surface-container-low px-4 py-2 rounded-lg border border-outline-variant/10 backdrop-blur-md interactive-card">
+                                <div class="flex items-center gap-2">
+                                        <span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+                                        <span class="text-sm font-medium text-on-surface-variant">Syncing
+                                                GitHub...</span>
+                                </div>
+                                <div class="h-4 w-px bg-outline-variant/30"></div>
+                                <span class="text-xs text-on-surface-variant/70">Last updated: 2m ago</span>
+                        </div>
+                </div>
+                <!-- Bento Grid Layout -->
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-[minmax(180px,_auto)]">
+                        <!-- Primary Metric: Velocity Score -->
+                        <div
+                                class="md:col-span-8 lg:col-span-8 bg-surface-container-low rounded-xl border border-outline-variant/10 p-6 relative overflow-hidden group interactive-card">
+                                <div
+                                        class="absolute -top-24 -right-24 w-64 h-64 bg-primary/10 rounded-full blur-[60px] pointer-events-none group-hover:bg-primary/20 transition-all duration-700">
+                                </div>
+                                <div class="flex justify-between items-start relative z-10 mb-8">
+                                        <div>
+                                                <h3
+                                                        class="text-sm font-semibold text-on-surface-variant uppercase tracking-wider mb-1">
+                                                        Career Velocity Index</h3>
+                                                <div class="flex items-baseline gap-3">
+                                                        <span
+                                                                class="text-6xl font-bold text-on-surface tracking-tighter">84</span>
+                                                        <span
+                                                                class="text-lg font-medium text-tertiary flex items-center"><span
+                                                                        class="material-symbols-outlined text-sm mr-1">trending_up</span>
+                                                                +12% YoY</span>
+                                                </div>
+                                        </div>
+                                        <button class="text-on-surface-variant hover:text-primary transition-colors">
+                                                <span class="material-symbols-outlined">more_horiz</span>
+                                        </button>
+                                </div>
+                                <div class="relative h-32 w-full mt-auto flex items-end gap-2">
+                                        <div
+                                                class="w-full flex items-end justify-between gap-1 md:gap-2 h-full opacity-80">
+                                                <div
+                                                        class="w-full bg-surface-container-highest rounded-t-sm h-[30%] hover:bg-primary/40 transition-colors cursor-pointer group/bar relative interactive-card">
+                                                </div>
+                                                <div
+                                                        class="w-full bg-surface-container-highest rounded-t-sm h-[45%] hover:bg-primary/40 transition-colors cursor-pointer group/bar relative interactive-card">
+                                                </div>
+                                                <div
+                                                        class="w-full bg-surface-container-highest rounded-t-sm h-[40%] hover:bg-primary/40 transition-colors cursor-pointer group/bar relative interactive-card">
+                                                </div>
+                                                <div
+                                                        class="w-full bg-surface-container-highest rounded-t-sm h-[60%] hover:bg-primary/40 transition-colors cursor-pointer group/bar relative interactive-card">
+                                                </div>
+                                                <div
+                                                        class="w-full bg-surface-container-highest rounded-t-sm h-[55%] hover:bg-primary/40 transition-colors cursor-pointer group/bar relative interactive-card">
+                                                </div>
+                                                <div
+                                                        class="w-full bg-surface-container-highest rounded-t-sm h-[75%] hover:bg-primary/40 transition-colors cursor-pointer group/bar relative interactive-card">
+                                                </div>
+                                                <div
+                                                        class="w-full bg-primary/60 rounded-t-sm h-[90%] shadow-[0_0_15px_rgba(173,198,255,0.3)] relative">
+                                                        <div
+                                                                class="absolute -top-8 left-1/2 -translate-x-1/2 bg-surface-container-highest text-xs text-on-surface px-2 py-1 rounded shadow-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity interactive-card">
+                                                                This Month</div>
+                                                </div>
+                                        </div>
+                                </div>
+                        </div>
+                        <!-- AI Insight -->
+                        <div
+                                class="md:col-span-4 lg:col-span-4 bg-surface-container-low rounded-xl border border-outline-variant/10 p-6 flex flex-col relative overflow-hidden backdrop-blur-sm interactive-card">
+                                <div class="absolute top-0 right-0 p-4 opacity-10">
+                                        <span
+                                                class="material-symbols-outlined text-6xl text-primary">auto_awesome</span>
+                                </div>
+                                <h3
+                                        class="text-sm font-semibold text-on-surface-variant uppercase tracking-wider mb-6 flex items-center gap-2">
+                                        <span class="material-symbols-outlined text-primary text-sm">memory</span> AI
+                                        Analysis
+                                </h3>
+                                <div class="space-y-5 flex-1 z-10 relative">
+                                        <div class="group">
+                                                <div class="flex items-center gap-2 mb-1">
+                                                        <span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+                                                        <span class="text-sm font-medium text-on-surface">System
+                                                                Architecture</span>
+                                                </div>
+                                                <p
+                                                        class="text-xs text-on-surface-variant/80 pl-3.5 border-l border-tertiary/20 ml-0.5 pb-1">
+                                                        Top 10% in component decoupling based on latest microservices
+                                                        repo.</p>
+                                        </div>
+                                        <div class="group">
+                                                <div class="flex items-center gap-2 mb-1">
+                                                        <span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+                                                        <span class="text-sm font-medium text-on-surface">Test
+                                                                Coverage</span>
+                                                </div>
+                                                <p
+                                                        class="text-xs text-on-surface-variant/80 pl-3.5 border-l border-error/20 ml-0.5 pb-1">
+                                                        Unit tests dropped by 15% in the last 3 sprints. High technical
+                                                        debt risk.</p>
+                                        </div>
+                                        <div class="group">
+                                                <div class="flex items-center gap-2 mb-1">
+                                                        <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                                                        <span class="text-sm font-medium text-on-surface">Skill Gap:
+                                                                Rust</span>
+                                                </div>
+                                                <p
+                                                        class="text-xs text-on-surface-variant/80 pl-3.5 border-l border-secondary/20 ml-0.5">
+                                                        High market demand. Consider translating an existing Go project.
+                                                </p>
+                                        </div>
+                                </div>
+                        </div>
+                        <!-- Skill Overview -->
+                        <div
+                                class="md:col-span-12 lg:col-span-6 bg-surface-container-low rounded-xl border border-outline-variant/10 p-6 interactive-card">
+                                <div class="flex justify-between items-center mb-6">
+                                        <h3
+                                                class="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">
+                                                Skill Density</h3>
+                                        <button
+                                                class="text-xs text-primary hover:text-primary-container transition-colors">Detailed
+                                                Breakdown</button>
+                                </div>
+                                <div class="space-y-6">
+                                        <div>
+                                                <div class="flex justify-between text-sm mb-2">
+                                                        <span
+                                                                class="text-on-surface font-medium flex items-center gap-2"><span
+                                                                        class="material-symbols-outlined text-sm text-outline-variant">desktop_windows</span>
+                                                                Frontend (React/Vue)</span>
+                                                        <span class="text-on-surface-variant">92%</span>
+                                                </div>
+                                                <div
+                                                        class="w-full bg-surface-container-highest rounded-full h-1.5 overflow-hidden interactive-card">
+                                                        <div class="bg-gradient-to-r from-primary-container to-primary h-1.5 rounded-full shadow-[0_0_10px_rgba(173,198,255,0.5)]"
+                                                                style="width: 92%"></div>
+                                                </div>
+                                        </div>
+                                        <div>
+                                                <div class="flex justify-between text-sm mb-2">
+                                                        <span
+                                                                class="text-on-surface font-medium flex items-center gap-2"><span
+                                                                        class="material-symbols-outlined text-sm text-outline-variant">dns</span>
+                                                                Backend (Node/Go)</span>
+                                                        <span class="text-on-surface-variant">78%</span>
+                                                </div>
+                                                <div
+                                                        class="w-full bg-surface-container-highest rounded-full h-1.5 overflow-hidden interactive-card">
+                                                        <div class="bg-gradient-to-r from-secondary-container to-secondary h-1.5 rounded-full shadow-[0_0_10px_rgba(208,188,255,0.3)]"
+                                                                style="width: 78%"></div>
+                                                </div>
+                                        </div>
+                                        <div>
+                                                <div class="flex justify-between text-sm mb-2">
+                                                        <span
+                                                                class="text-on-surface font-medium flex items-center gap-2"><span
+                                                                        class="material-symbols-outlined text-sm text-outline-variant">account_tree</span>
+                                                                Algorithms &amp; Data Structures</span>
+                                                        <span class="text-on-surface-variant">65%</span>
+                                                </div>
+                                                <div
+                                                        class="w-full bg-surface-container-highest rounded-full h-1.5 overflow-hidden interactive-card">
+                                                        <div class="bg-gradient-to-r from-tertiary-container to-tertiary h-1.5 rounded-full shadow-[0_0_10px_rgba(78,222,163,0.3)]"
+                                                                style="width: 65%"></div>
+                                                </div>
+                                        </div>
+                                        <div>
+                                                <div class="flex justify-between text-sm mb-2">
+                                                        <span
+                                                                class="text-on-surface font-medium flex items-center gap-2"><span
+                                                                        class="material-symbols-outlined text-sm text-outline-variant">cloud</span>
+                                                                Cloud &amp; DevOps</span>
+                                                        <span class="text-on-surface-variant">45%</span>
+                                                </div>
+                                                <div
+                                                        class="w-full bg-surface-container-highest rounded-full h-1.5 overflow-hidden interactive-card">
+                                                        <div class="bg-gradient-to-r from-outline-variant to-outline h-1.5 rounded-full"
+                                                                style="width: 45%"></div>
+                                                </div>
+                                        </div>
+                                </div>
+                        </div>
+                        <!-- Career Match Cards -->
+                        <div
+                                class="md:col-span-12 lg:col-span-6 bg-surface-container-low rounded-xl border border-outline-variant/10 p-6 interactive-card">
+                                <div class="flex justify-between items-center mb-6">
+                                        <h3
+                                                class="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">
+                                                Role Affinity Map</h3>
+                                </div>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div
+                                                class="bg-surface-container p-4 rounded-lg border border-outline-variant/10 hover:border-primary/30 transition-colors group cursor-pointer relative overflow-hidden interactive-card">
+                                                <div
+                                                        class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                                                </div>
+                                                <div class="flex justify-between items-start mb-4 relative z-10">
+                                                        <div
+                                                                class="p-2 bg-surface-container-highest rounded text-primary interactive-card">
+                                                                <span
+                                                                        class="material-symbols-outlined">developer_mode</span>
+                                                        </div>
+                                                        <span class="text-lg font-bold text-tertiary">94%</span>
+                                                </div>
+                                                <h4 class="text-base font-semibold text-on-surface mb-1 relative z-10">
+                                                        Senior Frontend Eng</h4>
+                                                <p class="text-xs text-on-surface-variant relative z-10">Strong match in
+                                                        React, TS, Architecture.</p>
+                                        </div>
+                                        <div
+                                                class="bg-surface-container p-4 rounded-lg border border-outline-variant/10 hover:border-secondary/30 transition-colors group cursor-pointer relative overflow-hidden interactive-card">
+                                                <div
+                                                        class="absolute inset-0 bg-gradient-to-br from-secondary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                                                </div>
+                                                <div class="flex justify-between items-start mb-4 relative z-10">
+                                                        <div
+                                                                class="p-2 bg-surface-container-highest rounded text-secondary interactive-card">
+                                                                <span
+                                                                        class="material-symbols-outlined">architecture</span>
+                                                        </div>
+                                                        <span class="text-lg font-bold text-secondary">72%</span>
+                                                </div>
+                                                <h4 class="text-base font-semibold text-on-surface mb-1 relative z-10">
+                                                        Full Stack Lead</h4>
+                                                <p class="text-xs text-on-surface-variant relative z-10">Gap in advanced
+                                                        CI/CD pipelines.</p>
+                                        </div>
+                                </div>
+                                <div
+                                        class="mt-6 p-4 bg-surface-variant/40 rounded-lg border border-outline-variant/20 flex items-center justify-between">
+                                        <div>
+                                                <h5
+                                                        class="text-sm font-medium text-on-surface mb-1 flex items-center gap-2">
+                                                        <span
+                                                                class="material-symbols-outlined text-sm text-primary">document_scanner</span>
+                                                        Resume Optimization</h5>
+                                                <p class="text-xs text-on-surface-variant">Update summary to reflect
+                                                        latest microservices work.</p>
+                                        </div>
+                                        <button
+                                                class="text-xs font-semibold text-primary hover:text-primary-container uppercase tracking-wider">Preview</button>
+                                </div>
+                        </div>
+                </div>
+        </main>
+        <!-- Footer -->
+        <footer
+                class="w-full py-12 bg-[#131313] border-t border-[#464555]/20 md:ml-64 max-w-[calc(100%-16rem)] relative z-10">
+                <div class="max-w-7xl mx-auto px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+                        <div class="text-center md:text-left">
+                                <p class="text-[#C7C4D8] text-xs tracking-widest font-['Inter'] uppercase">© 2024
+                                        ZeroLabs. Atmospheric Career Intelligence for Developers.</p>
+                        </div>
+                        <nav class="flex gap-6">
+                                <a class="text-[#C7C4D8] font-['Inter'] text-xs uppercase tracking-widest hover:text-[#ADC6FF] transition-colors underline-offset-4 hover:underline"
+                                        href="#">Documentation</a>
+                                <a class="text-[#C7C4D8] font-['Inter'] text-xs uppercase tracking-widest hover:text-[#ADC6FF] transition-colors underline-offset-4 hover:underline"
+                                        href="#">Privacy</a>
+                                <a class="text-[#C7C4D8] font-['Inter'] text-xs uppercase tracking-widest hover:text-[#ADC6FF] transition-colors underline-offset-4 hover:underline"
+                                        href="#">API Status</a>
+                                <a class="text-[#C7C4D8] font-['Inter'] text-xs uppercase tracking-widest hover:text-[#ADC6FF] transition-colors underline-offset-4 hover:underline"
+                                        href="#">GitHub</a>
+                        </nav>
+                </div>
+        </footer>
+
+        <script src="zerolabs.js"></script>
+        <script src="transitions.js"></script>
+</body>
+
+</html>

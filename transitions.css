@@ -1,0 +1,418 @@
+/* ═══════════════════════════════════════════════════════════
+   ZeroLabs — transitions.css
+   Page transition overlays, loading states, toast system.
+   Attach to EVERY page alongside transitions.js.
+═══════════════════════════════════════════════════════════ */
+
+
+/* ── Font Gate — prevent FOUT ────────────────────────────
+   Body starts invisible (opacity: 0) while the
+   `zl-fonts-loading` class is present. transitions.js
+   removes the class once document.fonts.ready resolves,
+   triggering a buttery 0.3s fade-in.
+────────────────────────────────────────────────────────── */
+
+html.zl-fonts-loading body {
+    opacity: 0 !important;
+}
+
+body.zl-fonts-ready {
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+/* ── Page Transition Overlay ──────────────────────────────
+   A full-screen dark curtain that wipes up to cover,
+   then wipes down to reveal the new page content.
+────────────────────────────────────────────────────────── */
+
+#zl-transition-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+/* Three staggered slats for a cinematic wipe */
+.zl-slat {
+    position: absolute;
+    inset: 0;
+    transform: translateY(100%);
+    will-change: transform;
+}
+.zl-slat--1 { background: #01030d; }
+.zl-slat--2 { background: #080c1a; }
+.zl-slat--3 { background: #0d1225; }
+
+/* ── Exit: slats slide UP to cover the page ─────────── */
+.zl-transition-exit .zl-slat--1 {
+    animation: slatCoverUp 0.35s cubic-bezier(0.7, 0, 0.3, 1) forwards;
+    animation-delay: 0s;
+}
+.zl-transition-exit .zl-slat--2 {
+    animation: slatCoverUp 0.35s cubic-bezier(0.7, 0, 0.3, 1) forwards;
+    animation-delay: 0.04s;
+}
+.zl-transition-exit .zl-slat--3 {
+    animation: slatCoverUp 0.35s cubic-bezier(0.7, 0, 0.3, 1) forwards;
+    animation-delay: 0.08s;
+}
+
+@keyframes slatCoverUp {
+    0%   { transform: translateY(100%); }
+    100% { transform: translateY(0%); }
+}
+
+/* ── Enter: slats slide UP to reveal the new page ────── */
+.zl-transition-enter .zl-slat--1 {
+    transform: translateY(0%);
+    animation: slatRevealUp 0.4s cubic-bezier(0.7, 0, 0.3, 1) forwards;
+    animation-delay: 0.08s;
+}
+.zl-transition-enter .zl-slat--2 {
+    transform: translateY(0%);
+    animation: slatRevealUp 0.4s cubic-bezier(0.7, 0, 0.3, 1) forwards;
+    animation-delay: 0.04s;
+}
+.zl-transition-enter .zl-slat--3 {
+    transform: translateY(0%);
+    animation: slatRevealUp 0.4s cubic-bezier(0.7, 0, 0.3, 1) forwards;
+    animation-delay: 0s;
+}
+
+@keyframes slatRevealUp {
+    0%   { transform: translateY(0%); }
+    100% { transform: translateY(-100%); }
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   Brutalist Loading Overlay (index.html "Analyze" flow)
+═══════════════════════════════════════════════════════════ */
+
+#zl-loading-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+    background: #01030d;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+#zl-loading-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+/* Scanline effect */
+#zl-loading-overlay::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(78, 222, 163, 0.02) 2px,
+        rgba(78, 222, 163, 0.02) 4px
+    );
+    pointer-events: none;
+    animation: scanlineShift 4s linear infinite;
+}
+
+@keyframes scanlineShift {
+    0%   { transform: translateY(0); }
+    100% { transform: translateY(4px); }
+}
+
+/* Grid accent lines */
+#zl-loading-overlay::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(90deg, transparent 49.8%, rgba(173, 198, 255, 0.03) 50%, transparent 50.2%),
+        linear-gradient(0deg, transparent 49.8%, rgba(173, 198, 255, 0.03) 50%, transparent 50.2%);
+    background-size: 60px 60px;
+    pointer-events: none;
+}
+
+/* ── Inner content ───── */
+.zl-loading-inner {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    max-width: 520px;
+    padding: 0 2rem;
+}
+
+/* Glitch logo */
+.zl-loading-logo {
+    font-family: 'Inter', sans-serif;
+    font-size: 2.8rem;
+    font-weight: 900;
+    letter-spacing: -0.05em;
+    color: #e5e2e1;
+    margin-bottom: 3rem;
+    position: relative;
+    display: inline-block;
+}
+.zl-loading-logo .zl-accent {
+    color: #4edea3;
+}
+
+/* Pulsing border frame */
+.zl-loading-frame {
+    border: 1px solid rgba(173, 198, 255, 0.15);
+    padding: 2rem 2.5rem;
+    position: relative;
+}
+.zl-loading-frame::before,
+.zl-loading-frame::after {
+    content: '';
+    position: absolute;
+    background: #4edea3;
+}
+/* Top-left corner */
+.zl-loading-frame::before {
+    top: -1px; left: -1px;
+    width: 24px; height: 1px;
+    box-shadow: 0 0 8px rgba(78, 222, 163, 0.5);
+}
+.zl-loading-frame::after {
+    top: -1px; left: -1px;
+    width: 1px; height: 24px;
+    box-shadow: 0 0 8px rgba(78, 222, 163, 0.5);
+}
+
+/* Bottom-right corner accents via child pseudo-elements */
+.zl-loading-frame-corners {
+    position: absolute;
+    bottom: -1px; right: -1px;
+    width: 24px; height: 24px;
+    pointer-events: none;
+}
+.zl-loading-frame-corners::before {
+    content: '';
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 24px; height: 1px;
+    background: #4edea3;
+    box-shadow: 0 0 8px rgba(78, 222, 163, 0.5);
+}
+.zl-loading-frame-corners::after {
+    content: '';
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 1px; height: 24px;
+    background: #4edea3;
+    box-shadow: 0 0 8px rgba(78, 222, 163, 0.5);
+}
+
+/* Status text */
+.zl-loading-status {
+    font-family: 'Inter', monospace;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: #ADC6FF;
+    text-transform: uppercase;
+    min-height: 1.4em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+}
+
+.zl-loading-status::before {
+    content: '>';
+    color: #4edea3;
+    font-weight: 900;
+    animation: cursorBlink 0.8s step-end infinite;
+}
+
+@keyframes cursorBlink {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0; }
+}
+
+/* Progress bar */
+.zl-loading-progress-track {
+    width: 100%;
+    height: 2px;
+    background: rgba(173, 198, 255, 0.08);
+    margin-top: 1.8rem;
+    overflow: hidden;
+    border-radius: 1px;
+}
+.zl-loading-progress-bar {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, #4F46E5, #4edea3);
+    box-shadow: 0 0 12px rgba(78, 222, 163, 0.5);
+    transition: width 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+    border-radius: 1px;
+}
+
+/* Subtle counter */
+.zl-loading-counter {
+    font-family: 'Inter', monospace;
+    font-size: 0.7rem;
+    color: rgba(199, 196, 216, 0.4);
+    letter-spacing: 0.1em;
+    margin-top: 0.8rem;
+    text-align: right;
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   Toast Notification System
+═══════════════════════════════════════════════════════════ */
+
+#zl-toast-container {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100001;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    pointer-events: none;
+    width: 100%;
+    max-width: 480px;
+    padding: 0 1rem;
+}
+
+.zl-toast {
+    pointer-events: all;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: rgba(20, 20, 28, 0.95);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 180, 171, 0.2);
+    border-radius: 0.6rem;
+    padding: 0.9rem 1.25rem;
+    width: 100%;
+    box-shadow:
+        0 16px 48px rgba(0, 0, 0, 0.6),
+        0 0 0 1px rgba(255, 180, 171, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    transform: translateY(120%) scale(0.95);
+    opacity: 0;
+    animation: toastIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    will-change: transform, opacity;
+}
+
+.zl-toast.dismiss {
+    animation: toastOut 0.35s cubic-bezier(0.7, 0, 0.3, 1) forwards;
+}
+
+.zl-toast--success {
+    border-color: rgba(78, 222, 163, 0.2);
+    box-shadow:
+        0 16px 48px rgba(0, 0, 0, 0.6),
+        0 0 0 1px rgba(78, 222, 163, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+@keyframes toastIn {
+    0%   { transform: translateY(120%) scale(0.95); opacity: 0; }
+    100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+@keyframes toastOut {
+    0%   { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(120%) scale(0.95); opacity: 0; }
+}
+
+.zl-toast-icon {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 800;
+}
+.zl-toast-icon--error {
+    background: rgba(147, 0, 10, 0.25);
+    color: #ffb4ab;
+    border: 1px solid rgba(255, 180, 171, 0.25);
+}
+.zl-toast-icon--success {
+    background: rgba(0, 82, 54, 0.25);
+    color: #4edea3;
+    border: 1px solid rgba(78, 222, 163, 0.25);
+}
+
+.zl-toast-body {
+    flex: 1;
+    min-width: 0;
+}
+.zl-toast-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #e5e2e1;
+    margin-bottom: 0.15rem;
+}
+.zl-toast-message {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.72rem;
+    color: rgba(199, 196, 216, 0.7);
+    line-height: 1.4;
+}
+
+.zl-toast-close {
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    color: rgba(199, 196, 216, 0.4);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: color 0.2s, background 0.2s;
+    font-size: 1rem;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.zl-toast-close:hover {
+    color: #e5e2e1;
+    background: rgba(255, 255, 255, 0.06);
+}
+
+/* ── Progress timer line on the toast ─── */
+.zl-toast-timer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    border-radius: 0 0 0.6rem 0.6rem;
+    animation: timerShrink var(--toast-duration, 4s) linear forwards;
+}
+.zl-toast-timer--error {
+    background: linear-gradient(90deg, #ffb4ab, #93000a);
+}
+.zl-toast-timer--success {
+    background: linear-gradient(90deg, #4edea3, #006e4b);
+}
+
+@keyframes timerShrink {
+    0%   { width: 100%; }
+    100% { width: 0%; }
+}
