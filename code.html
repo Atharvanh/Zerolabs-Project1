@@ -117,12 +117,13 @@
 <div class="absolute -inset-1 bg-gradient-to-r from-primary to-primary-container rounded-lg blur opacity-25 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
 <div class="relative flex items-center glass-card rounded-lg p-2 bg-surface-container-highest">
 <span class="material-symbols-outlined text-outline ml-3">code</span>
-<input class="flex-grow bg-transparent border-none text-on-surface focus:ring-0 placeholder:text-outline/60 text-lg px-4" placeholder="github.com/username" type="text"/>
-<button class="bg-gradient-to-r from-primary to-primary-container text-on-primary-container font-semibold py-3 px-6 rounded text-sm tracking-wide shadow-[0_0_20px_rgba(173,198,255,0.2)] hover:shadow-[0_0_30px_rgba(173,198,255,0.4)] transition-all">
+<input class="flex-grow bg-transparent border-none text-on-surface focus:ring-0 placeholder:text-outline/60 text-lg px-4" id="githubInput" placeholder="github.com/username" type="text"/>
+<button class="bg-gradient-to-r from-primary to-primary-container text-on-primary-container font-semibold py-3 px-6 rounded text-sm tracking-wide shadow-[0_0_20px_rgba(173,198,255,0.2)] hover:shadow-[0_0_30px_rgba(173,198,255,0.4)] transition-all" id="analyzeBtn" type="button">
                         Analyze Profile
                     </button>
 </div>
 </div>
+<p class="text-sm text-[#ffb4ab] mt-3 hidden" id="formError"></p>
 <p class="text-xs text-on-surface-variant mt-4 opacity-60">Join 10,000+ top-tier engineers already analyzed.</p>
 </div>
 <!-- Bento Grid Teaser (Optional based on typical landing page flow) -->
@@ -162,4 +163,82 @@
 </div>
 </div>
 </footer>
+<script>
+  const API_BASE = "http://localhost:3000";
+  const inputEl = document.getElementById("githubInput");
+  const buttonEl = document.getElementById("analyzeBtn");
+  const errorEl = document.getElementById("formError");
+
+  function parseGithubUsername(raw) {
+    const value = raw.trim();
+    if (!value) return "";
+
+    if (!value.includes("/")) return value.replace(/^@/, "");
+
+    try {
+      const normalized = value.startsWith("http") ? value : `https://${value}`;
+      const url = new URL(normalized);
+      const username = url.pathname.split("/").filter(Boolean)[0] ?? "";
+      return username.replace(/^@/, "");
+    } catch {
+      return value.replace(/^@/, "");
+    }
+  }
+
+  function setLoading(isLoading) {
+    buttonEl.disabled = isLoading;
+    buttonEl.textContent = isLoading ? "Analyzing..." : "Analyze Profile";
+    buttonEl.classList.toggle("opacity-60", isLoading);
+    buttonEl.classList.toggle("cursor-not-allowed", isLoading);
+  }
+
+  function showError(message) {
+    errorEl.textContent = message;
+    errorEl.classList.remove("hidden");
+  }
+
+  function clearError() {
+    errorEl.textContent = "";
+    errorEl.classList.add("hidden");
+  }
+
+  async function submitAudit() {
+    clearError();
+    const username = parseGithubUsername(inputEl.value);
+
+    if (!username) {
+      showError("Enter a valid GitHub username.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const response = await fetch(`${API_BASE}/api/audit`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username }),
+      });
+
+      const payload = await response.json();
+      if (!response.ok || !payload.ok) {
+        throw new Error(payload.error || "Failed to analyze this profile.");
+      }
+
+      localStorage.setItem("auditResult", JSON.stringify(payload));
+      window.location.href = "1.html";
+    } catch (error) {
+      showError(error.message || "Could not reach backend. Is it running on port 3000?");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  buttonEl.addEventListener("click", submitAudit);
+  inputEl.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      submitAudit();
+    }
+  });
+</script>
 </body></html>
