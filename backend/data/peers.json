@@ -1,0 +1,104 @@
+{
+  "profiles": {
+    "cy-technerd": {
+      "username": "cy-technerd",
+      "velocity": 10,
+      "composite_score": 10,
+      "top_language": "Unknown",
+      "repo_count": 0,
+      "total_stars": 0,
+      "lang_count": 3,
+      "updated_at": "2026-04-19T05:44:22.214Z"
+    },
+    "atharvanh": {
+      "username": "atharvanh",
+      "velocity": 27,
+      "composite_score": 17,
+      "top_language": "Unknown",
+      "repo_count": 0,
+      "total_stars": 0,
+      "lang_count": 3,
+      "updated_at": "2026-04-19T05:54:14.601Z"
+    },
+    "adiursoocool": {
+      "username": "adiursoocool",
+      "velocity": 19,
+      "composite_score": 14,
+      "top_language": "Unknown",
+      "repo_count": 0,
+      "total_stars": 0,
+      "lang_count": 3,
+      "updated_at": "2026-04-19T05:10:59.087Z"
+    },
+    "torvalds": {
+      "username": "torvalds",
+      "velocity": 95,
+      "composite_score": 44,
+      "top_language": "Unknown",
+      "repo_count": 0,
+      "total_stars": 0,
+      "lang_count": 3,
+      "updated_at": "2026-04-18T23:41:32.302Z"
+    },
+    "paraswadkarhe": {
+      "username": "paraswadkarhe",
+      "velocity": 88,
+      "composite_score": 41,
+      "top_language": "Unknown",
+      "repo_count": 0,
+      "total_stars": 0,
+      "lang_count": 3,
+      "updated_at": "2026-04-19T05:19:47.150Z"
+    },
+    "atharvaaaah": {
+      "username": "atharvaaaah",
+      "velocity": 15,
+      "composite_score": 12,
+      "top_language": "Unknown",
+      "repo_count": 0,
+      "total_stars": 0,
+      "lang_count": 3,
+      "updated_at": "2026-04-19T04:51:42.099Z"
+    },
+    "shriyash287": {
+      "username": "Shriyash287",
+      "velocity": 19,
+      "composite_score": 14,
+      "top_language": "Unknown",
+      "repo_count": 0,
+      "total_stars": 0,
+      "lang_count": 3,
+      "updated_at": "2026-04-19T05:42:37.063Z"
+    },
+    "atharva": {
+      "username": "atharva",
+      "velocity": 10,
+      "composite_score": 10,
+      "top_language": "Unknown",
+      "repo_count": 0,
+      "total_stars": 0,
+      "lang_count": 3,
+      "updated_at": "2026-04-19T05:49:47.601Z"
+    },
+    "chaitu": {
+      "username": "chaitu",
+      "velocity": 15,
+      "composite_score": 12,
+      "top_language": "Unknown",
+      "repo_count": 0,
+      "total_stars": 0,
+      "lang_count": 3,
+      "updated_at": "2026-04-19T05:49:56.865Z"
+    },
+    "atharvah": {
+      "username": "atharvah",
+      "velocity": 24,
+      "composite_score": 12,
+      "top_language": "Unknown",
+      "repo_count": 0,
+      "total_stars": 0,
+      "lang_count": 1,
+      "updated_at": "2026-04-19T05:54:02.113Z"
+    }
+  }
+}

@@ -1,12 +1,53 @@
 // services/gemini.js
 // Wraps the Google Gemini API.
 //
-// Gemini free tier: 15 req/min on 2.5-flash, 1500/day. Plenty for the demo.
-// We default to 2.5-flash (fast, smart enough). Use 2.5-pro only for the
-// flagship code review call where quality matters most.
+// Supports multiple API keys for rotation (GEMINI_API_KEY, GEMINI_API_KEY_2, etc.)
+// Each call rotates to the next key, effectively multiplying the RPM limit.
 
 const GEMINI_BASE = 'https://generativelanguage.googleapis.com/v1beta/models';
-const KEY = process.env.GEMINI_API_KEY;
+
+// ── Multi-key rotation ──────────────────────────────────────────────
+// Collect all GEMINI_API_KEY* env vars for round-robin rotation
+const API_KEYS = [];
+if (process.env.GEMINI_API_KEY) API_KEYS.push(process.env.GEMINI_API_KEY);
+if (process.env.GEMINI_API_KEY_2) API_KEYS.push(process.env.GEMINI_API_KEY_2);
+if (process.env.GEMINI_API_KEY_3) API_KEYS.push(process.env.GEMINI_API_KEY_3);
+if (API_KEYS.length === 0) {
+    console.error('❌ No GEMINI_API_KEY set in .env');
+    process.exit(1);
+}
+let _keyIndex = 0;
+function getKey() {
+    const key = API_KEYS[_keyIndex % API_KEYS.length];
+    _keyIndex++;
+    return key;
+}
+console.log(`🔑 Gemini: ${API_KEYS.length} API key(s) loaded for rotation`);
+
+// ── Global request queue ─────────────────────────────────────────────
+// Serialize requests + rotate keys to maximize throughput.
+// Free tier of gemini-2.5-flash = 15 RPM (4s between calls). Stay safely
+// under that: 5s for single key = 12 RPM. With N keys we can pipeline,
+// so the effective per-key gap is 5s/N.
+const SINGLE_KEY_GAP_MS = 5000;
+let _queue = Promise.resolve();
+let _lastCall = 0;
+const MIN_GAP_MS = Math.ceil(SINGLE_KEY_GAP_MS / API_KEYS.length);
+
+function enqueue(fn) {
+    const next = _queue.then(async () => {
+        const elapsed = Date.now() - _lastCall;
+        if (elapsed < MIN_GAP_MS) {
+            await sleep(MIN_GAP_MS - elapsed);
+        }
+        const result = await fn();
+        _lastCall = Date.now();
+        return result;
+    });
+    // Isolate the queue from failures — a rejected call must not block all future calls
+    _queue = next.catch(() => {});
+    return next;
+}
 
 /**
  * Call Gemini. Returns the raw text response.
@@ -26,11 +67,21 @@ export async function gemini(prompt, {
     schema,
     temperature = 0.3
 } = {}) {
+    return enqueue(() => _geminiRaw(prompt, { model, system, json, schema, temperature }));
+}
+
+async function _geminiRaw(prompt, {
+    model,
+    system,
+    json,
+    schema,
+    temperature
+}) {
     const body = {
         contents: [{ role: 'user', parts: [{ text: prompt }] }],
         generationConfig: {
             temperature,
-            maxOutputTokens: 32768,
+            maxOutputTokens: 8192,
             thinkingConfig: { thinkingBudget: 0 }
         }
     };
@@ -44,12 +95,15 @@ export async function gemini(prompt, {
         if (schema) body.generationConfig.responseSchema = schema;
     }
 
-    const url = `${GEMINI_BASE}/${model}:generateContent?key=${KEY}`;
+    const url = `${GEMINI_BASE}/${model}:generateContent?key=${getKey()}`;
 
     let attempt = 0;
-    let sawRateLimit = false;
-    let lastRateLimitWait = 0;
-    while (attempt < 3) {
+    const MAX_ATTEMPTS = 4;
+    // Exponential-ish backoff so transient free-tier 429s recover
+    // without the user ever seeing a failure.
+    const BACKOFF = [8000, 20000, 40000];
+
+    while (attempt < MAX_ATTEMPTS) {
         attempt++;
         const res = await fetch(url, {
             method: 'POST',
@@ -58,14 +112,13 @@ export async function gemini(prompt, {
         });
 
         if (res.status === 429) {
-            // Rate limited — wait and retry
-            const retryAfter = Number(res.headers.get('retry-after'));
+            // Honor Retry-After if the server sent one, otherwise use our backoff.
+            const retryAfter = parseInt(res.headers.get('retry-after') || '', 10);
+            const backoff = BACKOFF[attempt - 1] || 40000;
             const wait = Number.isFinite(retryAfter) && retryAfter > 0
-                ? retryAfter * 1000
-                : attempt * 2000;
-            sawRateLimit = true;
-            lastRateLimitWait = wait;
-            console.warn(`⏳ Gemini rate-limited, waiting ${wait}ms then retrying...`);
+                ? Math.min(retryAfter * 1000, 60000)
+                : backoff;
+            console.warn(`⏳ Gemini rate-limited (attempt ${attempt}/${MAX_ATTEMPTS}), waiting ${Math.round(wait / 1000)}s...`);
             await sleep(wait);
             continue;
         }
@@ -102,12 +155,10 @@ export async function gemini(prompt, {
         return text;
     }
 
-    if (sawRateLimit) {
-        const seconds = Math.max(2, Math.ceil(lastRateLimitWait / 1000));
-        throw new Error(`Gemini rate limited. Please retry in ${seconds}s.`);
-    }
-
-    throw new Error('Gemini: exhausted retries');
+    // Throw a clear, detectable rate-limit error
+    const err = new Error('rate_limited: Gemini API rate limit exceeded. Please wait 30-60 seconds and try again.');
+    err.status = 429;
+    throw err;
 }
 
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));

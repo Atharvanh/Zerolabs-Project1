@@ -20,7 +20,7 @@
     function renderFeatured(f) {
         const host = $('zl-project-featured');
         if (!host || !f) return;
-        const score = Math.max(0, Math.min(100, f.score ?? 0));
+        const score = Math.max(0, Math.min(100, f.quality_score ?? f.score ?? 0));
         host.innerHTML = `
             <div class="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl -mr-10 -mt-10 pointer-events-none"></div>
             <div class="flex flex-col md:flex-row justify-between gap-8 relative z-10">
@@ -48,6 +48,7 @@
                     <div class="w-full bg-surface-variant h-1 mt-4 rounded-full overflow-hidden">
                         <div class="bg-gradient-to-r from-primary to-tertiary h-full" style="width: ${score}%"></div>
                     </div>
+                    ${f.quality_justification ? `<p class="text-[10px] text-on-surface-variant mt-3 leading-relaxed text-center">${ZL.escapeHtml(f.quality_justification)}</p>` : ''}
                 </div>
             </div>`;
     }
@@ -63,7 +64,7 @@
         if (!section || !host) return;
         const prioritized = (list || [])
             .filter(p => p.resume_priority === 1 || p.resume_priority === 2)
-            .sort((a, b) => (a.resume_priority - b.resume_priority) || ((b.score ?? 0) - (a.score ?? 0)))
+            .sort((a, b) => (a.resume_priority - b.resume_priority) || (((b.quality_score ?? b.score) ?? 0) - ((a.quality_score ?? a.score) ?? 0)))
             .slice(0, 3);
         if (!prioritized.length) { section.classList.add('hidden'); return; }
         section.classList.remove('hidden');
@@ -94,7 +95,7 @@
         if (!host) return;
         host.innerHTML = '';
         (list || []).forEach(p => {
-            const score = Math.max(0, Math.min(100, p.score ?? 0));
+            const score = Math.max(0, Math.min(100, p.quality_score ?? p.score ?? 0));
             const card = document.createElement('div');
             card.className = 'project-card bg-surface-container-low rounded-xl p-6 ghost-border hover:bg-surface-container-high transition-colors cursor-pointer group relative overflow-hidden';
             const nameNode = p.html_url

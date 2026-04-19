@@ -118,6 +118,7 @@
         }
     </style>
     <link rel="stylesheet" href="zerolabs.css">
+    <script src="theme.js"></script>
     <link rel="stylesheet" href="transitions.css">
 </head>
 
@@ -137,7 +138,7 @@
                 class="hover:text-[#ADC6FF] hover:bg-white/5 transition-all active:scale-95 duration-200 p-2 rounded-full">
                 <span class="material-symbols-outlined">settings</span>
             </button>
-            <img alt="Developer Profile Avatar" class="w-8 h-8 rounded-full border border-outline-variant/20"
+            <img alt="Developer Profile Avatar" data-zl-avatar class="w-8 h-8 rounded-full border border-outline-variant/20"
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuCq_dnHUE0F_A91YAnPjWBRy-IVKeLI1ypeyQcDzxHI1SSUYjVv3NWFW3-qvQCXaBkicbW3_vzdL8xmkdr3ARQZVICQB6rScS0g_c1rsynIcZJQLE4MfdZRH-X_3iGpb1aE6BwB1MnmqNORcfmCiAFUqXz_jXnhjSb46fy0KHYLs_eGStGb_tpW3DHEQdNh6D2LiE9BVBdVgWA1lDwi7qPf_FJSpXZiU-5aBKmD8KRXTA8c5EsqpogNNIT-qO0kADGKxn5u2rP680A" />
         </div>
     </header>
@@ -146,17 +147,17 @@
         class="bg-[#1C1B1B] font-['Inter'] text-sm font-medium h-screen w-64 hidden md:flex flex-col bg-[#131313] flat no-border fixed left-0 top-0 pt-20 pb-8 px-4 space-y-2 z-40 border-r border-outline-variant/10">
         <div class="mb-8 px-4">
             <div class="flex items-center gap-3 mb-6">
-                <img alt="User Avatar" class="w-10 h-10 rounded-full border border-outline-variant/20"
+                <img alt="User Avatar" data-zl-avatar class="w-10 h-10 rounded-full border border-outline-variant/20"
                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnDwJ5c3Ldn-jmTVY_JUJmng8db5T3bubUi9Xk-e-yogDxrmxQxUqFStgx6ovJszObWpDDZvDx7GsM0i_7V7UbaLScYmhmuGnXgENiF23doNwcBRshR_M3DJVQ5Qzfiqb5rz--k7ZGvuF09hD1YSYYuGEaxKNF10rNOxM2nPL35MIew4W8kT8ECGHDOp3WcWuVC-_tBFLL1_N7k4h2MlKbhLfoOPjOa6u0SbQ-7iBFMmksfgefzrOv458gov-oIkY-hOtO0efJPxE" />
                 <div>
                     <div id="zl-sidebar-name" class="text-on-surface font-semibold text-sm">Developer Intelligence</div>
                     <div id="zl-sidebar-velocity" class="text-on-surface-variant text-xs">Career Velocity: --</div>
                 </div>
             </div>
-            <button
-                class="w-full py-2 px-4 rounded primary-gradient-bg text-on-primary font-semibold hover:shadow-[0_0_15px_rgba(173,198,255,0.2)] transition-shadow cursor-pointer transition-all">
-                Analyze New Repo
-            </button>
+            <a href="index.html"
+                class="w-full py-2 px-4 rounded primary-gradient-bg text-on-primary font-semibold hover:shadow-[0_0_15px_rgba(173,198,255,0.2)] transition-shadow flex items-center justify-center gap-2 no-underline">
+                <span class="material-symbols-outlined text-sm">person_search</span> Analyze New User
+            </a>
         </div>
         <div class="flex-1 space-y-2">
             <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-[#C7C4D8] hover:bg-[#2A2A2A]/50 hover:translate-x-1 transition-transform duration-300 cursor-pointer transition-all"
@@ -206,7 +207,7 @@
         <!-- Header & Progress -->
         <div class="mb-12">
             <h1 id="zl-roadmap-title" class="text-3xl md:text-[3.5rem] font-bold tracking-tight text-on-surface mb-2 leading-none">90-Day Roadmap</h1>
-            <p id="zl-roadmap-sub" class="text-on-surface-variant text-lg max-w-2xl mt-4">Analyzing your trajectory...</p>
+            <p id="zl-roadmap-sub" class="text-on-surface-variant text-lg max-w-2xl mt-4"><br>Analyzing your trajectory...</p>
             <div class="mt-8 glass-card p-6 rounded-xl relative overflow-hidden interactive-card">
                 <div class="absolute inset-0 bg-primary/5 blur-3xl rounded-full translate-y-1/2"></div>
                 <div class="relative z-10 flex justify-between items-end mb-4">

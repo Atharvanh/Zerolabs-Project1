@@ -97,7 +97,7 @@
         if (!r) return;
         const progress = Math.max(0, Math.min(100, r.overall_progress ?? 0));
         const title = $('zl-roadmap-title');
-        if (title) title.textContent = `${r.target_role || 'Career'} — 90-Day Roadmap`;
+        if (title) title.textContent = `90-Day Roadmap for ${r.target_role || 'Career'}`;
         const sub = $('zl-roadmap-sub');
         if (sub) sub.textContent = r.subtitle || '';
         const prog = $('zl-roadmap-progress');

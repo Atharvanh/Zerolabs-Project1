@@ -86,28 +86,75 @@
         });
     }
 
-    function renderVelocityIndex(vi) {
+    function renderVelocityIndex(vi, reposSummary, languages) {
         if (!vi) return;
+
+        // ── Score ──
+        const score = vi.score ?? 0;
         const scoreEl = $('zl-vi-score');
-        if (scoreEl) scoreEl.textContent = String(vi.score ?? '--');
+        if (scoreEl) scoreEl.textContent = String(score);
+
+        // ── Momentum Badge ──
+        const badgeEl = $('zl-vi-momentum-badge');
+        if (badgeEl) {
+            let label, cls;
+            if (score >= 70) {
+                label = 'High Momentum';
+                cls = 'bg-tertiary/10 text-tertiary border-tertiary/20';
+            } else if (score >= 40) {
+                label = 'Steady Growth';
+                cls = 'bg-primary/10 text-primary border-primary/20';
+            } else if (score >= 15) {
+                label = 'Building';
+                cls = 'bg-secondary/10 text-secondary border-secondary/20';
+            } else {
+                label = 'Getting Started';
+                cls = 'bg-outline/10 text-on-surface-variant border-outline-variant/20';
+            }
+            badgeEl.textContent = label;
+            badgeEl.className = `px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-full border ${cls}`;
+        }
+
+        // ── YoY ──
         const yoy = vi.yoy ?? 0;
         const yoyEl = $('zl-vi-yoy');
         if (yoyEl) {
             const arrow = yoy >= 0 ? 'arrow_upward' : 'arrow_downward';
-            const sign = yoy >= 0 ? '+' : '';
-            const colorCls = yoy >= 0 ? 'text-tertiary' : 'text-error';
-            yoyEl.className = `text-xs ${colorCls} ml-1 inline-flex items-center`;
-            yoyEl.innerHTML = `<span class="material-symbols-outlined text-[10px]">${arrow}</span>${sign}${yoy}%`;
+            const sign = yoy > 0 ? '+' : '';
+            const colorCls = yoy > 0 ? 'text-tertiary' : yoy < 0 ? 'text-error' : 'text-on-surface-variant';
+            yoyEl.className = `text-sm font-bold ${colorCls} inline-flex items-center gap-0.5`;
+            yoyEl.innerHTML = `<span class="material-symbols-outlined text-xs">${arrow}</span>${sign}${yoy}%`;
         }
+
+        // ── Peak Skill ──
         const peakEl = $('zl-vi-peak');
         if (peakEl) peakEl.textContent = vi.peak_skill || '--';
 
+        // ── Activity Stats Strip ──
+        const totalRepos = reposSummary?.total ?? '--';
+        const distinctLangs = languages?.length ?? '--';
+        // Estimate active repos from the history trend (last value as proxy)
+        const history = (vi.history && vi.history.length) ? vi.history.slice(-6) : [];
+        const lastVal = history.length ? history[history.length - 1] : 0;
+        // Approximate: if score is high, most repos are active
+        const estimatedActive = totalRepos !== '--'
+            ? Math.max(1, Math.round(totalRepos * (lastVal / 100)))
+            : '--';
+
+        const activeEl = $('zl-vi-active');
+        if (activeEl) activeEl.textContent = estimatedActive;
+        const totalReposEl = $('zl-vi-total-repos');
+        if (totalReposEl) totalReposEl.textContent = totalRepos;
+        const langsEl = $('zl-vi-langs');
+        if (langsEl) langsEl.textContent = distinctLangs;
+
+        // ── Chart (unchanged logic) ──
         const svg = $('zl-vi-history');
         if (svg) {
-            const history = (vi.history && vi.history.length) ? vi.history.slice(-6) : [60, 65, 68, 70, 72, 75];
-            const n = history.length;
-            const maxV = Math.max(...history, 100);
-            const coords = history.map((v, i) => ({
+            const h = history.length ? history : [10, 12, 15, 18, 20, 22];
+            const n = h.length;
+            const maxV = Math.max(...h, 100);
+            const coords = h.map((v, i) => ({
                 x: (i / (n - 1)) * 200,
                 y: 100 - ((v / maxV) * 90)
             }));
@@ -143,7 +190,7 @@
             renderProficiencyList('zl-sg-frameworks', sg.frameworks);
             renderProficiencyList('zl-sg-tools', sg.tools);
             renderProficiencyList('zl-sg-soft', sg.soft_skills);
-            renderVelocityIndex(sg.velocity_index);
+            renderVelocityIndex(sg.velocity_index, data.repos_summary, data.languages);
             renderRadar(sg.radar);
         } catch (err) {
             console.error('[ZeroLabs] skill_graph failed:', err);

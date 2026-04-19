@@ -36,7 +36,7 @@
             sessionStorage.setItem(CACHE_KEY, JSON.stringify({
                 username,
                 data,
-                expiresAt: Date.now() + 10 * 60 * 1000
+                expiresAt: Date.now() + 30 * 60 * 1000 // 30 min — match backend cache
             }));
         } catch {}
     }
@@ -97,6 +97,125 @@
         return data;
     }
 
+    const REPO_AUDIT_CACHE_KEY = 'zl:repo-audit';
+
+    async function fetchRepoAudit(owner, repo, claim) {
+        const effectiveClaim = (claim == null ? getClaim() : claim) || '';
+        try {
+            const raw = sessionStorage.getItem(REPO_AUDIT_CACHE_KEY);
+            if (raw) {
+                const parsed = JSON.parse(raw);
+                if (parsed && parsed.owner === owner && parsed.repo === repo && parsed.claim === effectiveClaim && parsed.expiresAt > Date.now()) {
+                    return parsed.data;
+                }
+            }
+        } catch {}
+
+        const res = await fetch(`${API_BASE}/audit/repo/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ claim: effectiveClaim })
+        });
+        if (!res.ok) {
+            let body = {};
+            try { body = await res.json(); } catch {}
+            const err = new Error(body.message || `Backend returned ${res.status}`);
+            err.status = res.status;
+            throw err;
+        }
+        const data = await res.json();
+        try {
+            sessionStorage.setItem(REPO_AUDIT_CACHE_KEY, JSON.stringify({
+                owner, repo,
+                claim: effectiveClaim,
+                data,
+                expiresAt: Date.now() + 10 * 60 * 1000
+            }));
+        } catch {}
+        return data;
+    }
+
+    const URL_AUDIT_CACHE_KEY = 'zl:url-audit';
+
+    async function fetchUrlAudit(url, claim) {
+        const effectiveClaim = (claim == null ? getClaim() : claim) || '';
+        try {
+            const raw = sessionStorage.getItem(URL_AUDIT_CACHE_KEY);
+            if (raw) {
+                const parsed = JSON.parse(raw);
+                if (parsed && parsed.url === url && parsed.claim === effectiveClaim && parsed.expiresAt > Date.now()) {
+                    return parsed.data;
+                }
+            }
+        } catch {}
+
+        const res = await fetch(`${API_BASE}/audit/url`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ url, claim: effectiveClaim })
+        });
+        if (!res.ok) {
+            let body = {};
+            try { body = await res.json(); } catch {}
+            const err = new Error(body.message || `Backend returned ${res.status}`);
+            err.status = res.status;
+            throw err;
+        }
+        const data = await res.json();
+        try {
+            sessionStorage.setItem(URL_AUDIT_CACHE_KEY, JSON.stringify({
+                url,
+                claim: effectiveClaim,
+                data,
+                expiresAt: Date.now() + 10 * 60 * 1000
+            }));
+        } catch {}
+        return data;
+    }
+
+    const CAREER_CACHE_KEY = 'zl:career';
+
+    async function fetchCareerMatches(username) {
+        try {
+            const raw = sessionStorage.getItem(CAREER_CACHE_KEY);
+            if (raw) {
+                const parsed = JSON.parse(raw);
+                if (parsed && parsed.username === username && parsed.expiresAt > Date.now()) {
+                    return parsed.data;
+                }
+            }
+        } catch {}
+
+        const res = await fetch(`${API_BASE}/career/matches/${encodeURIComponent(username)}`);
+        if (!res.ok) {
+            let body = {};
+            try { body = await res.json(); } catch {}
+            const err = new Error(body.message || `Backend returned ${res.status}`);
+            err.status = res.status;
+            throw err;
+        }
+        const data = await res.json();
+        try {
+            sessionStorage.setItem(CAREER_CACHE_KEY, JSON.stringify({
+                username,
+                data,
+                expiresAt: Date.now() + 10 * 60 * 1000
+            }));
+        } catch {}
+        return data;
+    }
+
+    const _peerInflight = {};
+    async function fetchPeerPercentile(username) {
+        if (_peerInflight[username]) return _peerInflight[username];
+        const promise = fetch(`${API_BASE}/peers/percentile/${encodeURIComponent(username)}`)
+            .then(r => r.ok ? r.json() : null)
+            .catch(() => null)
+            .finally(() => { delete _peerInflight[username]; });
+        _peerInflight[username] = promise;
+        return promise;
+    }
+
     function preserveNavLinks(username) {
         if (!username) return;
         const internal = [
@@ -142,6 +261,10 @@
         getClaim,
         fetchAnalysis,
         fetchAudit,
+        fetchRepoAudit,
+        fetchUrlAudit,
+        fetchCareerMatches,
+        fetchPeerPercentile,
         preserveNavLinks,
         escapeHtml,
         applyProfile

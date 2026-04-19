@@ -13,6 +13,8 @@ import cors from 'cors';
 import githubRoutes from './routes/github.js';
 import analyzeRoutes from './routes/analyze.js';
 import auditRoutes from './routes/audit.js';
+import careerRoutes from './routes/career.js';
+import peersRoutes from './routes/peers.js';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -52,12 +54,15 @@ app.get('/api/health', (_req, res) => {
 app.use('/api/github', githubRoutes);
 app.use('/api/analyze', analyzeRoutes);
 app.use('/api/audit', auditRoutes);
+app.use('/api/career', careerRoutes);
+app.use('/api/peers', peersRoutes);
 
 // --- Error handler ----------------------------------------------------
 app.use((err, _req, res, _next) => {
-    console.error('💥 Unhandled error:', err);
-    res.status(500).json({
-        error: 'internal_error',
+    const status = err.status || 500;
+    console.error(`💥 Error (${status}):`, err.message);
+    res.status(status).json({
+        error: status === 429 ? 'rate_limited' : 'internal_error',
         message: err.message || 'Something went wrong'
     });
 });

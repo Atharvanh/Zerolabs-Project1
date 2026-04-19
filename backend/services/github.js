@@ -59,6 +59,22 @@ export async function getUser(username) {
 }
 
 /**
+ * Fetch metadata for a single repo.
+ * Returns: { name, full_name, description, language, stargazers_count, forks_count, size, ... }
+ */
+export async function getRepo(owner, repo) {
+    return gh(`/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}`);
+}
+
+/**
+ * Fetch language breakdown for a single repo.
+ * Returns: { JavaScript: 12345, Python: 6789, ... } (bytes per language)
+ */
+export async function getRepoLanguages(owner, repo) {
+    return gh(`/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/languages`);
+}
+
+/**
  * List a user's public repositories, sorted by last updated.
  * We cap at 30 — anything more and you'll blow LLM token budgets later.
  * Forks are filtered out because they don't represent the dev's own work.
@@ -68,14 +84,6 @@ export async function listRepos(username, { limit = 30 } = {}) {
         `/users/${encodeURIComponent(username)}/repos?sort=updated&per_page=${limit}&type=owner`
     );
     return repos.filter(r => !r.fork);
-}
-
-/**
- * Language breakdown for a single repo.
- * Returns: { TypeScript: 45123, CSS: 12430, ... }  (bytes per language)
- */
-export async function getRepoLanguages(owner, repo) {
-    return gh(`/repos/${owner}/${repo}/languages`);
 }
 
 /**

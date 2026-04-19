@@ -1,228 +1,710 @@
 <!DOCTYPE html>
 
-<html class="dark" lang="en"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>ZeroLabs - Developer Career Intelligence</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<html class="dark" lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>ZeroLabs - Developer Career Intelligence</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap">
-  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap">
+  <link rel="preload" as="style"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap">
+  <link rel="preload" as="style"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap">
   <script>document.documentElement.classList.add('zl-fonts-loading');</script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">tailwind.config = {
-    darkMode: "class",
-    theme: {
-      extend: {
-        colors: {
-          "primary": "#4F46E5",
-          "background-light": "#000000",
-          "background-dark": "#000000",
-          "surface": "#000000",
-          "surface-container": "#0a0a0a",
-          "surface-container-high": "#121212",
-          "surface-container-highest": "#1a1a1a",
-          "on-background": "#f6f6f8",
-          "on-surface": "#ffffff",
-          "on-surface-variant": "#a1a1aa"
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <script id="tailwind-config">tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#4F46E5",
+            "background-light": "#000000",
+            "background-dark": "#000000",
+            "surface": "#000000",
+            "surface-container": "#0a0a0a",
+            "surface-container-high": "#121212",
+            "surface-container-highest": "#1a1a1a",
+            "on-background": "#f6f6f8",
+            "on-surface": "#ffffff",
+            "on-surface-variant": "#a1a1aa"
+          },
+          fontFamily: {
+            "display": ["Inter"]
+          },
+          borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
         },
-        fontFamily: {
-          "display": ["Inter"]
-        },
-        borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
       },
-    },
-  }</script>
-<style>
-        body { font-family: 'Inter', sans-serif; background-color: #01030d; color: #f6f6f8; overflow-x: hidden; }
-        #canvas-container { width: 100vw; height: 100vh; display: block; position: fixed; top: 0; left: 0; z-index: 0; pointer-events: none; }
-        #canvas-container::after { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, transparent 35%, #01030d 120%); pointer-events: none; z-index: 1; }
-        .glass-card { background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .text-gradient { background: linear-gradient(90deg, #4F46E5, #4edea3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .bg-gradient-hero { background: radial-gradient(circle at top right, rgba(79, 70, 229, 0.08), transparent 40%), radial-gradient(circle at bottom left, rgba(78, 222, 163, 0.08), transparent 40%); }
-        #zl-loader-overlay { display: none; }
-        #zl-loader-overlay.is-active { display: flex; }
-        .zl-stage-row { transition: color 0.3s ease, opacity 0.3s ease; }
-        .zl-stage-row[data-state="done"] { opacity: 1; color: #4edea3; }
-        .zl-stage-row[data-state="active"] { opacity: 1; color: #ffffff; }
-        .zl-stage-row[data-state="pending"] { opacity: 0.35; color: #a1a1aa; }
-        @keyframes zl-spin { to { transform: rotate(360deg); } }
-        .zl-spin { animation: zl-spin 1s linear infinite; transform-origin: 50% 50%; }
-    </style>
-<link rel="stylesheet" href="interactions.css">
-<link rel="stylesheet" href="transitions.css">
+    }</script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #01030d;
+      color: #f6f6f8;
+      overflow-x: hidden;
+    }
+
+    #canvas-container {
+      width: 100vw;
+      height: 100vh;
+      display: block;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+
+    #canvas-container::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, transparent 35%, #01030d 120%);
+      pointer-events: none;
+      z-index: 1;
+      transition: background 0.4s ease;
+    }
+
+    html.light #canvas-container::after {
+      background: radial-gradient(circle, transparent 35%, #f8f9fa 120%);
+    }
+
+    .glass-card {
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .text-gradient {
+      background: linear-gradient(90deg, #4F46E5, #4edea3);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .bg-gradient-hero {
+      background: radial-gradient(circle at top right, rgba(79, 70, 229, 0.08), transparent 40%), radial-gradient(circle at bottom left, rgba(78, 222, 163, 0.08), transparent 40%);
+    }
+
+    #zl-loader-overlay {
+      display: none;
+    }
+
+    #zl-loader-overlay.is-active {
+      display: flex;
+    }
+
+    .zl-stage-row {
+      transition: color 0.3s ease, opacity 0.3s ease;
+    }
+
+    .zl-stage-row[data-state="done"] {
+      opacity: 1;
+      color: #4edea3;
+    }
+
+    .zl-stage-row[data-state="active"] {
+      opacity: 1;
+      color: #ffffff;
+    }
+
+    .zl-stage-row[data-state="pending"] {
+      opacity: 0.35;
+      color: #a1a1aa;
+    }
+
+    @keyframes zl-spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .zl-spin {
+      animation: zl-spin 1s linear infinite;
+      transform-origin: 50% 50%;
+    }
+
+    /* ── Dissolve-out animation for page content ────────────────── */
+    @keyframes zl-dissolve-out {
+      0% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+      }
+      60% {
+        opacity: 0.3;
+        transform: translateY(-18px) scale(0.98);
+        filter: blur(4px);
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-30px) scale(0.96);
+        filter: blur(8px);
+        pointer-events: none;
+      }
+    }
+
+    @keyframes zl-dissolve-in {
+      0% {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.97);
+        filter: blur(6px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+      }
+    }
+
+    @keyframes zl-popup-in {
+      0% {
+        opacity: 0;
+        transform: scale(0.85);
+        filter: blur(8px);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+        filter: blur(0);
+      }
+    }
+
+    @keyframes zl-popup-out {
+      0% {
+        opacity: 1;
+        transform: scale(1);
+        filter: blur(0);
+      }
+      100% {
+        opacity: 0;
+        transform: scale(0.9);
+        filter: blur(6px);
+      }
+    }
+
+    @keyframes zl-pulse-ring {
+      0% {
+        box-shadow: 0 0 0 0 rgba(78, 222, 163, 0.4);
+      }
+      70% {
+        box-shadow: 0 0 0 12px rgba(78, 222, 163, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(78, 222, 163, 0);
+      }
+    }
+
+    .zl-dissolving {
+      animation: zl-dissolve-out 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    .zl-restoring {
+      animation: zl-dissolve-in 0.5s cubic-bezier(0, 0, 0.2, 1) forwards;
+    }
+
+    #zl-loader-overlay .glass-card {
+      animation: zl-popup-in 0.5s cubic-bezier(0, 0, 0.2, 1) forwards;
+    }
+
+    #zl-loader-overlay .glass-card.is-leaving {
+      animation: zl-popup-out 0.35s cubic-bezier(0.4, 0, 1, 1) forwards;
+    }
+
+    #zl-loader-overlay .zl-pulse-dot {
+      animation: zl-pulse-ring 1.5s ease-in-out infinite;
+    }
+  </style>
+  <link rel="stylesheet" href="interactions.css">
+  <link rel="stylesheet" href="zerolabs.css">
+  <script src="theme.js"></script>
+  <link rel="stylesheet" href="transitions.css">
 </head>
+
 <body class="antialiased min-h-screen flex flex-col relative bg-[#01030d]">
-<div id="canvas-container"></div>
-<!-- Loader overlay shown while backend fetch is in-flight -->
-<div id="zl-loader-overlay" class="fixed inset-0 z-[100] items-center justify-center bg-black/90 backdrop-blur-md">
-  <div class="glass-card rounded-2xl p-10 max-w-md w-full mx-6 text-center">
-    <div class="text-gradient text-2xl font-bold tracking-tight mb-1">ZeroLabs</div>
-    <div id="zl-loader-user" class="text-[10px] uppercase tracking-[0.25em] text-on-surface-variant mb-8">Initializing</div>
-    <svg class="w-14 h-14 mx-auto mb-8" viewBox="0 0 50 50">
-      <circle cx="25" cy="25" r="20" fill="none" stroke="#1f1f2b" stroke-width="4"></circle>
-      <circle class="zl-spin" cx="25" cy="25" r="20" fill="none" stroke="#4edea3" stroke-width="4" stroke-linecap="round" stroke-dasharray="90 200"></circle>
-    </svg>
-    <ul id="zl-loader-stages" class="text-left text-sm space-y-3">
-      <li data-stage="profile" data-state="pending" class="zl-stage-row flex items-center gap-3">
-        <span class="material-symbols-outlined text-base">radio_button_unchecked</span>
-        <span>Fetching GitHub profile</span>
-      </li>
-      <li data-stage="repos" data-state="pending" class="zl-stage-row flex items-center gap-3">
-        <span class="material-symbols-outlined text-base">radio_button_unchecked</span>
-        <span>Scanning repositories</span>
-      </li>
-      <li data-stage="lang" data-state="pending" class="zl-stage-row flex items-center gap-3">
-        <span class="material-symbols-outlined text-base">radio_button_unchecked</span>
-        <span>Aggregating language breakdown</span>
-      </li>
-      <li data-stage="ai" data-state="pending" class="zl-stage-row flex items-center gap-3">
-        <span class="material-symbols-outlined text-base">radio_button_unchecked</span>
-        <span>Running AI analysis</span>
-      </li>
-    </ul>
-    <p class="text-[10px] text-on-surface-variant mt-6 opacity-60">This usually takes 5–15 seconds on a cold cache.</p>
+  <div id="canvas-container"></div>
+  <!-- Floating Loader Popup (transparent bg, mesh stays visible) -->
+  <div id="zl-loader-overlay" class="fixed inset-0 z-[100] flex items-center justify-center" style="background: transparent;">
+    <div class="glass-card rounded-2xl p-10 w-[380px] max-w-[90vw] text-center relative overflow-hidden"
+         style="background: rgba(1, 3, 13, 0.7); backdrop-filter: blur(32px) saturate(1.4); border: 1px solid rgba(78, 222, 163, 0.12); box-shadow: 0 30px 90px rgba(0,0,0,0.5), 0 0 80px rgba(78,222,163,0.06), inset 0 1px 0 rgba(255,255,255,0.06);">
+      <!-- Subtle top-edge highlight -->
+      <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+      <div class="text-gradient text-2xl font-bold tracking-tight mb-1">ZeroLabs</div>
+      <div id="zl-loader-user" class="text-[10px] uppercase tracking-[0.25em] text-on-surface-variant mb-8">Initializing</div>
+      <div class="relative w-14 h-14 mx-auto mb-8">
+        <svg class="w-14 h-14" viewBox="0 0 50 50">
+          <circle cx="25" cy="25" r="20" fill="none" stroke="#1f1f2b" stroke-width="3"></circle>
+          <circle class="zl-spin" cx="25" cy="25" r="20" fill="none" stroke="url(#zl-loader-grad)" stroke-width="3"
+            stroke-linecap="round" stroke-dasharray="80 200"></circle>
+          <defs>
+            <linearGradient id="zl-loader-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#4edea3"/>
+              <stop offset="100%" stop-color="#4F46E5"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <div class="zl-pulse-dot absolute inset-0 m-auto w-3 h-3 bg-tertiary rounded-full"></div>
+      </div>
+      <ul id="zl-loader-stages" class="text-left text-sm space-y-3">
+        <li data-stage="profile" data-state="pending" class="zl-stage-row flex items-center gap-3">
+          <span class="material-symbols-outlined text-base">radio_button_unchecked</span>
+          <span>Fetching GitHub profile</span>
+        </li>
+        <li data-stage="repos" data-state="pending" class="zl-stage-row flex items-center gap-3">
+          <span class="material-symbols-outlined text-base">radio_button_unchecked</span>
+          <span>Scanning repositories</span>
+        </li>
+        <li data-stage="lang" data-state="pending" class="zl-stage-row flex items-center gap-3">
+          <span class="material-symbols-outlined text-base">radio_button_unchecked</span>
+          <span>Aggregating language breakdown</span>
+        </li>
+        <li data-stage="ai" data-state="pending" class="zl-stage-row flex items-center gap-3">
+          <span class="material-symbols-outlined text-base">radio_button_unchecked</span>
+          <span>Running AI analysis</span>
+        </li>
+      </ul>
+      <p id="zl-loader-hint" class="text-[10px] text-on-surface-variant mt-6 opacity-50">Usually 5–15 seconds on cold cache</p>
+      <!-- Error display (hidden by default) -->
+      <div id="zl-loader-error" class="hidden mt-6">
+        <div class="flex items-center gap-2 justify-center mb-3">
+          <span class="material-symbols-outlined text-error text-xl">error</span>
+          <span class="text-error font-semibold text-sm">Analysis Failed</span>
+        </div>
+        <p id="zl-loader-error-msg" class="text-xs text-on-surface-variant mb-4 leading-relaxed"></p>
+        <div class="flex gap-3 justify-center">
+          <button id="zl-loader-retry"
+            class="bg-gradient-to-r from-primary to-primary-container text-on-primary-container font-semibold py-2 px-5 rounded text-xs tracking-wide hover:shadow-[0_0_20px_rgba(173,198,255,0.3)] transition-all">Retry</button>
+          <button id="zl-loader-dismiss"
+            class="text-xs text-on-surface-variant hover:text-on-surface transition-colors py-2 px-4">Dismiss</button>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
-<!-- TopAppBar -->
-<nav class="fixed top-0 w-full z-50 backdrop-blur-xl border-b-0 shadow-[0_20px_40px_rgba(0,0,0,0.4)] bg-black/80">
-<div class="flex items-center justify-between px-6 h-16 w-full max-w-7xl mx-auto">
-<div class="flex items-center gap-2">
-<a href="index.html" class="text-xl font-bold tracking-tighter text-[#E5E2E1]"><span class="material-symbols-outlined text-[#4edea3] mr-1" style="vertical-align: bottom; font-size: 1.1em;">bolt</span>ZeroLabs</a>
-</div>
-<div class="flex items-center gap-4">
-<!-- Hiding standard trailing actions for a landing page, prioritizing main CTA -->
-</div>
-</div>
-</nav>
-<!-- Main Content -->
-<main class="flex-grow flex flex-col items-center justify-start pt-8 pb-24 px-6 relative z-10">
-<!-- Hero Section -->
-<div class="max-w-4xl w-full text-center space-y-8 flex flex-col items-center">
-<div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-card text-xs font-semibold tracking-wider text-on-surface-variant mb-4 border border-outline-variant/20">
-<span class="w-2 h-2 rounded-full bg-tertiary"></span>
-<span>V2.0 INTELLIGENCE ENGINE LIVE</span>
-</div>
-<h1 class="text-5xl md:text-7xl font-bold tracking-tighter leading-tight text-on-surface">
-                Know Your Real <br/>
-<span class="text-gradient">Developer Skill Level</span>
-</h1>
-<p class="text-lg md:text-xl text-on-surface-variant max-w-2xl font-medium">
-                AI-powered GitHub analysis to unlock your career potential. Stop guessing, start measuring your true engineering velocity.
+  <!-- TopAppBar -->
+  <nav id="zl-page-nav" class="fixed top-0 w-full z-50 backdrop-blur-xl border-b-0 shadow-[0_20px_40px_rgba(0,0,0,0.4)] bg-black/80">
+    <div class="flex items-center justify-between px-6 h-16 w-full max-w-7xl mx-auto">
+      <div class="flex items-center gap-2">
+        <a href="index.html" class="text-xl font-bold tracking-tighter text-[#E5E2E1]"><span
+            class="material-symbols-outlined text-[#4edea3] mr-1"
+            style="vertical-align: bottom; font-size: 1.1em;">bolt</span>ZeroLabs</a>
+      </div>
+      <div class="flex items-center gap-4">
+        <button
+          class="zl-theme-toggle hover:text-[#ADC6FF] hover:bg-white/5 transition-all p-2 rounded-full active:scale-95 duration-200 text-[#C7C4D8]"
+          title="Toggle light/dark mode">
+          <span class="material-symbols-outlined zl-theme-icon"
+            style="font-variation-settings: 'FILL' 0;">light_mode</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+  <!-- Main Content -->
+  <main id="zl-page-main" class="flex-grow flex flex-col items-center justify-start pt-8 pb-24 px-6 relative z-10">
+    <!-- Hero Section -->
+    <div class="max-w-4xl w-full text-center space-y-8 flex flex-col items-center">
+      <div
+        class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-card text-xs font-semibold tracking-wider text-on-surface-variant mb-4 border border-outline-variant/20">
+        <span class="w-2 h-2 rounded-full bg-tertiary"></span>
+        <span>V2.0 INTELLIGENCE ENGINE LIVE</span>
+      </div>
+      <h1 class="text-5xl md:text-7xl font-bold tracking-tighter leading-tight text-on-surface">
+        Know Your Real <br />
+        <span class="text-gradient">Developer Skill Level</span>
+      </h1>
+      <p class="text-lg md:text-xl text-on-surface-variant max-w-2xl font-medium">
+        AI-powered GitHub analysis to unlock your career potential. Stop guessing, start measuring your true engineering
+        velocity.
+      </p>
+      <!-- Input Area -->
+      <div class="w-full max-w-lg mt-12 relative group">
+        <div
+          class="absolute -inset-1 bg-gradient-to-r from-primary to-primary-container rounded-lg blur opacity-25 group-hover:opacity-40 transition duration-1000 group-hover:duration-200">
+        </div>
+        <div class="relative flex items-center glass-card rounded-lg p-2 bg-black/70 backdrop-blur-lg">
+          <span class="material-symbols-outlined text-outline ml-3">code</span>
+          <input id="gh-input"
+            class="flex-grow bg-transparent border-none text-on-surface focus:ring-0 placeholder:text-outline/60 text-lg px-4"
+            placeholder="username, repo URL, or live site URL" type="text" />
+          <button id="gh-analyze-btn" type="button"
+            class="bg-gradient-to-r from-primary to-primary-container text-on-primary-container font-semibold py-3 px-6 rounded text-sm tracking-wide shadow-[0_0_20px_rgba(173,198,255,0.2)] hover:shadow-[0_0_30px_rgba(173,198,255,0.4)] transition-all">Analyze</button>
+        </div>
+        <p id="gh-input-error" class="text-xs text-red-400 mt-2 hidden"></p>
+        <!-- Resume upload / claim section (always visible) -->
+        <div class="mt-6 bg-black/50 backdrop-blur-md rounded-xl p-4 border border-outline-variant/10">
+          <label class="block text-[10px] uppercase tracking-[0.2em] text-on-surface-variant mb-3">Upload resume — we'll
+            compare claims vs your code</label>
+
+          <!-- File upload area -->
+          <div id="resume-drop-zone"
+            class="relative border-2 border-dashed border-outline-variant/30 rounded-lg p-5 text-center cursor-pointer hover:border-primary/50 hover:bg-primary/5 transition-all group">
+            <input id="resume-file" type="file" accept=".pdf,.txt,.md"
+              class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
+            <span
+              class="material-symbols-outlined text-2xl text-on-surface-variant group-hover:text-primary transition-colors">upload_file</span>
+            <p class="text-sm text-on-surface-variant mt-1 group-hover:text-on-surface transition-colors">
+              Drop resume here or click to upload
             </p>
-<!-- Input Area -->
-<div class="w-full max-w-lg mt-12 relative group">
-<div class="absolute -inset-1 bg-gradient-to-r from-primary to-primary-container rounded-lg blur opacity-25 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
-<div class="relative flex items-center glass-card rounded-lg p-2 bg-black/40">
-<span class="material-symbols-outlined text-outline ml-3">code</span>
-<input id="gh-input" class="flex-grow bg-transparent border-none text-on-surface focus:ring-0 placeholder:text-outline/60 text-lg px-4" placeholder="github.com/username" type="text"/>
-<button id="gh-analyze-btn" type="button" class="bg-gradient-to-r from-primary to-primary-container text-on-primary-container font-semibold py-3 px-6 rounded text-sm tracking-wide shadow-[0_0_20px_rgba(173,198,255,0.2)] hover:shadow-[0_0_30px_rgba(173,198,255,0.4)] transition-all">Analyze Profile</button>
-</div>
-<p id="gh-input-error" class="text-xs text-red-400 mt-2 hidden"></p>
-<!-- Optional claim textarea -->
-<div class="mt-4">
-  <button id="gh-claim-toggle" type="button" class="flex items-center gap-1 text-xs text-on-surface-variant hover:text-on-surface transition-colors">
-    <span id="gh-claim-chevron" class="material-symbols-outlined text-sm">expand_more</span>
-    <span>Add a claim for the 360 audit (optional)</span>
-  </button>
-  <div id="gh-claim-wrap" class="hidden mt-3 text-left">
-    <label class="block text-[10px] uppercase tracking-[0.2em] text-on-surface-variant mb-2" for="gh-claim">How would you describe yourself?</label>
-    <textarea id="gh-claim" rows="3" class="w-full bg-black/40 glass-card rounded-lg p-3 text-sm text-on-surface placeholder:text-outline/60 focus:ring-1 focus:ring-primary focus:border-primary outline-none resize-y" placeholder="e.g. Full-stack engineer, 4 years of React + Node, built 3 production apps with Postgres and Stripe."></textarea>
-    <p class="text-[10px] text-on-surface-variant mt-2 opacity-60">We'll cross-reference this against your real code and surface contradictions.</p>
-  </div>
-</div>
-</div>
-<p class="text-xs text-on-surface-variant mt-4 opacity-60">Join 10,000+ top-tier engineers already analyzed.</p>
-</div>
-<!-- Bento Grid Teaser (Optional based on typical landing page flow) -->
-<div class="max-w-6xl w-full mt-32 grid grid-cols-1 md:grid-cols-3 gap-6">
-<div class="glass-card rounded-xl p-8 flex flex-col gap-4 relative overflow-hidden">
-<div class="absolute top-0 right-0 p-4 opacity-10">
-<span class="material-symbols-outlined text-6xl">insights</span>
-</div>
-<h3 class="text-xl font-semibold text-on-surface z-10">Atmospheric Analysis</h3>
-<p class="text-sm text-on-surface-variant z-10">Deep dive into code quality, not just commit volume.</p>
-</div>
-<div class="glass-card rounded-xl p-8 flex flex-col gap-4 relative overflow-hidden">
-<div class="absolute top-0 right-0 p-4 opacity-10">
-<span class="material-symbols-outlined text-6xl">timeline</span>
-</div>
-<h3 class="text-xl font-semibold text-on-surface z-10">Velocity Tracking</h3>
-<p class="text-sm text-on-surface-variant z-10">Measure your true output speed against industry benchmarks.</p>
-</div>
-<div class="glass-card rounded-xl p-8 flex flex-col gap-4 relative overflow-hidden">
-<div class="absolute top-0 right-0 p-4 opacity-10">
-<span class="material-symbols-outlined text-6xl">workspace_premium</span>
-</div>
-<h3 class="text-xl font-semibold text-on-surface z-10">Skill Topography</h3>
-<p class="text-sm text-on-surface-variant z-10">Map your technical expertise across complex tech stacks.</p>
-</div>
-</div>
-</main>
-<!-- Footer -->
-<footer class="w-full py-12 border-t border-[#464555]/20 z-10 relative bg-black">
-<div class="max-w-7xl mx-auto px-8 flex flex-col md:flex-row justify-between items-center gap-6">
-<p class="font-['Inter'] text-xs uppercase tracking-widest text-[#C7C4D8]">© 2024 ZeroLabs. Atmospheric Career Intelligence for Developers.</p>
-<div class="flex gap-6">
-<a class="font-['Inter'] text-xs uppercase tracking-widest text-[#C7C4D8] hover:text-[#ADC6FF] transition-colors underline-offset-4 hover:underline" href="#">Documentation</a>
-<a class="font-['Inter'] text-xs uppercase tracking-widest text-[#C7C4D8] hover:text-[#ADC6FF] transition-colors underline-offset-4 hover:underline" href="#">Privacy</a>
-<a class="font-['Inter'] text-xs uppercase tracking-widest text-[#C7C4D8] hover:text-[#ADC6FF] transition-colors underline-offset-4 hover:underline" href="#">API Status</a>
-<a class="font-['Inter'] text-xs uppercase tracking-widest text-[#C7C4D8] hover:text-[#ADC6FF] transition-colors underline-offset-4 hover:underline" href="#">GitHub</a>
-</div>
-</footer>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="mesh-wave.js"></script>
-<script src="interactions.js"></script>
-<script src="transitions.js"></script>
-<script src="zl-api.js"></script>
-<script>
-(function () {
-    function extractUsername(raw) {
-        if (!raw) return '';
-        let s = raw.trim();
-        s = s.replace(/^https?:\/\//i, '').replace(/^www\./i, '');
-        s = s.replace(/^github\.com\//i, '');
-        s = s.split(/[\/?#]/)[0];
-        s = s.replace(/^@/, '');
-        return s.trim();
-    }
+            <p class="text-[10px] text-on-surface-variant/60 mt-1">PDF, TXT, or MD • Max 5MB</p>
+          </div>
 
-    const input = document.getElementById('gh-input');
-    const btn = document.getElementById('gh-analyze-btn');
-    const errEl = document.getElementById('gh-input-error');
-    const overlay = document.getElementById('zl-loader-overlay');
-    const overlayUser = document.getElementById('zl-loader-user');
-    const claimInput = document.getElementById('gh-claim');
-    const claimToggle = document.getElementById('gh-claim-toggle');
-    const claimWrap = document.getElementById('gh-claim-wrap');
-    const claimChevron = document.getElementById('gh-claim-chevron');
+          <!-- Extracted text preview (hidden until file is loaded) -->
+          <div id="resume-preview" class="hidden mt-3">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-[10px] uppercase tracking-[0.2em] text-tertiary font-bold">✓ Resume loaded</span>
+              <button id="resume-clear" type="button"
+                class="text-[10px] text-error hover:text-error/80 transition-colors">Clear</button>
+            </div>
+            <div id="resume-text-preview"
+              class="glass-card rounded-lg p-3 text-xs text-on-surface-variant max-h-24 overflow-y-auto font-mono leading-relaxed">
+            </div>
+          </div>
 
-    if (claimToggle) {
-        claimToggle.addEventListener('click', () => {
-            const open = claimWrap.classList.toggle('hidden') === false;
-            if (claimChevron) claimChevron.textContent = open ? 'expand_less' : 'expand_more';
-            if (open) claimInput?.focus();
+          <!-- Or divider -->
+          <div class="flex items-center gap-3 my-3">
+            <div class="flex-1 h-px bg-outline-variant/20"></div>
+            <span class="text-[10px] text-on-surface-variant uppercase tracking-widest">or type manually</span>
+            <div class="flex-1 h-px bg-outline-variant/20"></div>
+          </div>
+
+          <!-- Manual claim textarea -->
+          <textarea id="gh-claim" rows="2"
+            class="w-full bg-black/60 glass-card rounded-lg p-3 text-sm text-on-surface placeholder:text-outline/60 focus:ring-1 focus:ring-primary focus:border-primary outline-none resize-y"
+            placeholder="e.g. Full-stack engineer, 4 yrs React + Node, 3 production apps with Postgres."></textarea>
+          <p class="text-[10px] text-on-surface-variant mt-2 opacity-60">We'll cross-reference this against your real
+            code and surface contradictions.</p>
+        </div>
+      </div>
+      <p class="text-xs text-on-surface-variant mt-4 opacity-60">Join 10,000+ top-tier engineers already analyzed.</p>
+    </div>
+    <!-- Bento Grid Teaser (Optional based on typical landing page flow) -->
+    <div class="max-w-6xl w-full mt-32 grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="glass-card rounded-xl p-8 flex flex-col gap-4 relative overflow-hidden">
+        <div class="absolute top-0 right-0 p-4 opacity-10">
+          <span class="material-symbols-outlined text-6xl">insights</span>
+        </div>
+        <h3 class="text-xl font-semibold text-on-surface z-10">Atmospheric Analysis</h3>
+        <p class="text-sm text-on-surface-variant z-10">Deep dive into code quality, not just commit volume.</p>
+      </div>
+      <div class="glass-card rounded-xl p-8 flex flex-col gap-4 relative overflow-hidden">
+        <div class="absolute top-0 right-0 p-4 opacity-10">
+          <span class="material-symbols-outlined text-6xl">timeline</span>
+        </div>
+        <h3 class="text-xl font-semibold text-on-surface z-10">Velocity Tracking</h3>
+        <p class="text-sm text-on-surface-variant z-10">Measure your true output speed against industry benchmarks.</p>
+      </div>
+      <div class="glass-card rounded-xl p-8 flex flex-col gap-4 relative overflow-hidden">
+        <div class="absolute top-0 right-0 p-4 opacity-10">
+          <span class="material-symbols-outlined text-6xl">workspace_premium</span>
+        </div>
+        <h3 class="text-xl font-semibold text-on-surface z-10">Skill Topography</h3>
+        <p class="text-sm text-on-surface-variant z-10">Map your technical expertise across complex tech stacks.</p>
+      </div>
+    </div>
+  </main>
+  <!-- Footer -->
+  <footer id="zl-page-footer" class="w-full py-12 border-t border-[#464555]/20 z-10 relative bg-black">
+    <div class="max-w-7xl mx-auto px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+      <p class="font-['Inter'] text-xs uppercase tracking-widest text-[#C7C4D8]">© 2026 ZeroLabs. Atmospheric Career
+        Intelligence for Developers.</p>
+      <div class="flex gap-6">
+        <a class="font-['Inter'] text-xs uppercase tracking-widest text-[#C7C4D8] hover:text-[#ADC6FF] transition-colors underline-offset-4 hover:underline"
+          href="#">Documentation</a>
+        <a class="font-['Inter'] text-xs uppercase tracking-widest text-[#C7C4D8] hover:text-[#ADC6FF] transition-colors underline-offset-4 hover:underline"
+          href="#">Privacy</a>
+        <a class="font-['Inter'] text-xs uppercase tracking-widest text-[#C7C4D8] hover:text-[#ADC6FF] transition-colors underline-offset-4 hover:underline"
+          href="#">API Status</a>
+        <a class="font-['Inter'] text-xs uppercase tracking-widest text-[#C7C4D8] hover:text-[#ADC6FF] transition-colors underline-offset-4 hover:underline"
+          href="#">GitHub</a>
+      </div>
+  </footer>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script>
+      // Dynamic mesh-wave loader: smooth crossfade between dark ↔ light
+      (function () {
+        let currentSrc = null;
+        let currentScript = null;
+        let debounceTimer = null;
+        let isSwapping = false;
+
+        function getScript() {
+          return document.documentElement.classList.contains('light')
+            ? 'mesh-wave-light.js'
+            : 'mesh-wave.js';
+        }
+
+        function loadMeshWave(animate) {
+          const src = getScript();
+          if (src === currentSrc) return;
+          if (isSwapping) return;
+
+          const container = document.getElementById('canvas-container');
+          if (!container) return;
+
+          function doSwap() {
+            isSwapping = true;
+            currentSrc = src;
+
+            // Clear old canvas + renderer
+            container.innerHTML = '';
+            if (currentScript && currentScript.parentNode) {
+              currentScript.parentNode.removeChild(currentScript);
+            }
+
+            // Inject new script
+            const s = document.createElement('script');
+            s.src = src + '?v=' + Date.now();
+            s.onload = () => {
+              // Fade back in after a tiny delay for the first frame to render
+              requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                  container.style.opacity = '1';
+                  isSwapping = false;
+                });
+              });
+            };
+            document.body.appendChild(s);
+            currentScript = s;
+          }
+
+          if (animate && currentSrc !== null) {
+            // Smooth: fade out → swap → fade in
+            container.style.opacity = '0';
+            setTimeout(doSwap, 400); // wait for fade-out
+          } else {
+            // First load: no animation
+            doSwap();
+          }
+        }
+
+        // Initial load
+        if (document.readyState === 'loading') {
+          window.addEventListener('DOMContentLoaded', () => loadMeshWave(false));
+        } else {
+          loadMeshWave(false);
+        }
+
+        // Theme toggle — debounced, animated
+        const observer = new MutationObserver(() => {
+          clearTimeout(debounceTimer);
+          debounceTimer = setTimeout(() => loadMeshWave(true), 150);
         });
-    }
+        observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+      })();
+  </script>
+  <script src="interactions.js"></script>
+  <script src="transitions.js"></script>
+  <script src="zl-api.js"></script>
+  <script>
+    (function () {
+      /**
+       * Detect input type and extract structured data.
+       * Returns { type: 'handle'|'repo'|'url', value, owner?, repo? }
+       */
+      function parseInput(raw) {
+        if (!raw) return null;
+        let s = raw.trim();
 
-    try {
+        // Live URL — anything with a non-github domain + protocol, or a TLD that isn't github.com
+        // First check for an explicit protocol to a non-GitHub host
+        const hasProtocol = /^https?:\/\//i.test(s);
+        if (hasProtocol) {
+          try {
+            const u = new URL(s);
+            if (!/github\.com$/i.test(u.hostname)) {
+              return { type: 'url', value: s };
+            }
+            // It's a github.com URL — parse path
+            const parts = u.pathname.replace(/^\//, '').split('/').filter(Boolean);
+            if (parts.length >= 2) {
+              return { type: 'repo', owner: parts[0], repo: parts[1].replace(/\.git$/i, '') };
+            }
+            if (parts.length === 1) {
+              return { type: 'handle', value: parts[0] };
+            }
+            return null;
+          } catch { return null; }
+        }
+
+        // No protocol — check for non-github domain patterns (e.g. mysite.com, vercel.app)
+        if (/^[a-z0-9]([a-z0-9-]*\.)+[a-z]{2,}/i.test(s) && !/^github\.com/i.test(s)) {
+          return { type: 'url', value: 'https://' + s };
+        }
+
+        // github.com/user/repo or github.com/user
+        s = s.replace(/^www\./i, '');
+        if (/^github\.com\//i.test(s)) {
+          const parts = s.replace(/^github\.com\//i, '').split(/[\/?#]/);
+          if (parts.length >= 2 && parts[1]) {
+            return { type: 'repo', owner: parts[0], repo: parts[1].replace(/\.git$/i, '') };
+          }
+          if (parts[0]) return { type: 'handle', value: parts[0] };
+          return null;
+        }
+
+        // Bare username (no dots, no slashes beyond owner/repo)
+        s = s.replace(/^@/, '');
+        if (/^[a-zA-Z0-9-]+\/[a-zA-Z0-9._-]+$/.test(s)) {
+          const [owner, repo] = s.split('/');
+          return { type: 'repo', owner, repo: repo.replace(/\.git$/i, '') };
+        }
+        if (/^[a-zA-Z0-9]([a-zA-Z0-9-]{0,38})$/.test(s)) {
+          return { type: 'handle', value: s };
+        }
+
+        return null;
+      }
+
+      const input = document.getElementById('gh-input');
+      const btn = document.getElementById('gh-analyze-btn');
+      const errEl = document.getElementById('gh-input-error');
+      const overlay = document.getElementById('zl-loader-overlay');
+      const overlayUser = document.getElementById('zl-loader-user');
+      const claimInput = document.getElementById('gh-claim');
+      const resumeFile = document.getElementById('resume-file');
+      const resumePreview = document.getElementById('resume-preview');
+      const resumeTextPreview = document.getElementById('resume-text-preview');
+      const resumeClear = document.getElementById('resume-clear');
+      const resumeDropZone = document.getElementById('resume-drop-zone');
+
+      // ── Resume text extracted from PDF/TXT ──
+      let resumeText = '';
+
+      // ── PDF text extraction using PDF.js ──
+      async function extractPdfText(arrayBuffer) {
+        if (typeof pdfjsLib === 'undefined') {
+          throw new Error('PDF.js not loaded');
+        }
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+        const pages = [];
+        for (let i = 1; i <= Math.min(pdf.numPages, 10); i++) {
+          const page = await pdf.getPage(i);
+          const content = await page.getTextContent();
+          pages.push(content.items.map(item => item.str).join(' '));
+        }
+        return pages.join('\n\n').trim();
+      }
+
+      // ── Handle file selection ──
+      async function handleResumeFile(file) {
+        if (!file) return;
+        if (file.size > 5 * 1024 * 1024) {
+          errEl.textContent = 'Resume file too large (max 5MB).';
+          errEl.classList.remove('hidden');
+          return;
+        }
+        errEl.classList.add('hidden');
+
+        try {
+          if (file.type === 'application/pdf' || file.name.endsWith('.pdf')) {
+            const buffer = await file.arrayBuffer();
+            resumeText = await extractPdfText(buffer);
+          } else {
+            // Plain text / markdown
+            resumeText = await file.text();
+          }
+
+          // Truncate to ~4000 chars to stay within token budget
+          if (resumeText.length > 4000) {
+            resumeText = resumeText.slice(0, 4000) + '\n...(truncated)';
+          }
+
+          // Show preview
+          resumeTextPreview.textContent = resumeText.slice(0, 500) + (resumeText.length > 500 ? '...' : '');
+          resumePreview.classList.remove('hidden');
+          resumeDropZone.classList.add('hidden');
+
+          // Save to session
+          try { sessionStorage.setItem('zl:resume', resumeText); } catch { }
+
+        } catch (ex) {
+          console.error('Resume extraction failed:', ex);
+          errEl.textContent = 'Could not read resume. Try a different file or paste the text manually.';
+          errEl.classList.remove('hidden');
+        }
+      }
+
+      if (resumeFile) {
+        resumeFile.addEventListener('change', (e) => {
+          if (e.target.files?.[0]) handleResumeFile(e.target.files[0]);
+        });
+      }
+
+      // ── Drag & drop ──
+      if (resumeDropZone) {
+        resumeDropZone.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          resumeDropZone.classList.add('border-primary/50', 'bg-primary/5');
+        });
+        resumeDropZone.addEventListener('dragleave', () => {
+          resumeDropZone.classList.remove('border-primary/50', 'bg-primary/5');
+        });
+        resumeDropZone.addEventListener('drop', (e) => {
+          e.preventDefault();
+          resumeDropZone.classList.remove('border-primary/50', 'bg-primary/5');
+          if (e.dataTransfer.files?.[0]) handleResumeFile(e.dataTransfer.files[0]);
+        });
+      }
+
+      // ── Clear resume ──
+      if (resumeClear) {
+        resumeClear.addEventListener('click', () => {
+          resumeText = '';
+          resumePreview.classList.add('hidden');
+          resumeDropZone.classList.remove('hidden');
+          if (resumeFile) resumeFile.value = '';
+          try { sessionStorage.removeItem('zl:resume'); } catch { }
+        });
+      }
+
+      // ── Restore saved state ──
+      try {
+        const savedResume = sessionStorage.getItem('zl:resume') || '';
+        if (savedResume) {
+          resumeText = savedResume;
+          resumeTextPreview.textContent = savedResume.slice(0, 500) + (savedResume.length > 500 ? '...' : '');
+          resumePreview?.classList.remove('hidden');
+          resumeDropZone?.classList.add('hidden');
+        }
         const savedClaim = sessionStorage.getItem('zl:claim') || '';
         if (savedClaim && claimInput) {
-            claimInput.value = savedClaim;
-            claimWrap?.classList.remove('hidden');
-            if (claimChevron) claimChevron.textContent = 'expand_less';
+          claimInput.value = savedClaim;
         }
-    } catch {}
+      } catch { }
 
-    const STAGES = ['profile', 'repos', 'lang', 'ai'];
-    const STAGE_DELAYS = [0, 1400, 2800, 4600];
-    let stageTimers = [];
+      // ── Build combined claim from resume + manual text ──
+      function buildClaim() {
+        const parts = [];
+        if (resumeText) parts.push('[RESUME]\n' + resumeText);
+        const manual = (claimInput?.value || '').trim();
+        if (manual) parts.push('[SELF-DESCRIPTION]\n' + manual);
+        return parts.join('\n\n');
+      }
 
-    function setStage(name, state) {
+      const STAGE_LABELS = {
+        handle: ['Fetching GitHub profile', 'Scanning repositories', 'Aggregating language breakdown', 'Running AI analysis'],
+        repo: ['Fetching repository metadata', 'Sampling source files', 'Running language analysis', 'Running deep code audit'],
+        url: ['Fetching live page', 'Detecting tech stack', 'Analyzing surface metrics', 'Running AI audit']
+      };
+      const STAGES = ['profile', 'repos', 'lang', 'ai'];
+      const STAGE_DELAYS = [0, 1400, 2800, 4600];
+      let stageTimers = [];
+
+      function setStage(name, state) {
         const row = document.querySelector(`#zl-loader-stages [data-stage="${name}"]`);
         if (!row) return;
         row.setAttribute('data-state', state);
@@ -231,87 +713,209 @@
         if (state === 'done') icon.textContent = 'check_circle';
         else if (state === 'active') icon.textContent = 'progress_activity';
         else icon.textContent = 'radio_button_unchecked';
-    }
+      }
 
-    function resetStages() {
+      function resetStages() {
         clearStageTimers();
         STAGES.forEach(s => setStage(s, 'pending'));
-    }
+      }
 
-    function clearStageTimers() {
+      function clearStageTimers() {
         stageTimers.forEach(id => clearTimeout(id));
         stageTimers = [];
-    }
+      }
 
-    function runStageChoreography() {
+      function updateStageLabels(type) {
+        const labels = STAGE_LABELS[type] || STAGE_LABELS.handle;
+        const rows = document.querySelectorAll('#zl-loader-stages .zl-stage-row');
+        rows.forEach((row, i) => {
+          const textSpan = row.querySelector('span:last-child');
+          if (textSpan && labels[i]) textSpan.textContent = labels[i];
+        });
+      }
+
+      function runStageChoreography() {
         resetStages();
         STAGES.forEach((stage, i) => {
-            stageTimers.push(setTimeout(() => {
-                if (i > 0) setStage(STAGES[i - 1], 'done');
-                setStage(stage, 'active');
-            }, STAGE_DELAYS[i]));
+          stageTimers.push(setTimeout(() => {
+            if (i > 0) setStage(STAGES[i - 1], 'done');
+            setStage(stage, 'active');
+          }, STAGE_DELAYS[i]));
         });
-    }
+      }
 
-    function completeAllStages() {
+      function completeAllStages() {
         clearStageTimers();
         STAGES.forEach(s => setStage(s, 'done'));
-    }
+      }
 
-    function showLoader(user) {
-        overlayUser.textContent = `Analyzing @${user}`;
-        overlay.classList.add('is-active');
+      // Elements that should dissolve out
+      const dissolveTargets = [
+        document.getElementById('zl-page-nav'),
+        document.getElementById('zl-page-main'),
+        document.getElementById('zl-page-footer')
+      ].filter(Boolean);
+
+      function showLoader(label, type) {
+        overlayUser.textContent = label;
+        updateStageLabels(type);
+
+        // ── Step 1: Dissolve all page content with stagger ──
+        dissolveTargets.forEach((el, i) => {
+          el.classList.remove('zl-restoring');
+          el.style.animationDelay = `${i * 0.12}s`;
+          el.classList.add('zl-dissolving');
+        });
+
+        // ── Step 2: Show the floating popup after content dissolves ──
+        setTimeout(() => {
+          overlay.classList.add('is-active');
+          const popup = overlay.querySelector('.glass-card');
+          if (popup) popup.classList.remove('is-leaving');
+          runStageChoreography();
+        }, 350);
+
         document.body.style.overflow = 'hidden';
-        runStageChoreography();
-    }
+      }
 
-    function hideLoader() {
-        overlay.classList.remove('is-active');
-        document.body.style.overflow = '';
+      function hideLoader() {
         clearStageTimers();
-    }
 
-    async function go() {
-        const user = extractUsername(input.value);
-        if (!/^[a-zA-Z0-9]([a-zA-Z0-9-]{0,38})$/.test(user)) {
-            errEl.textContent = 'Enter a valid GitHub username (e.g. github.com/torvalds).';
-            errEl.classList.remove('hidden');
-            return;
+        // ── Step 1: Popup dissolves out ──
+        const popup = overlay.querySelector('.glass-card');
+        if (popup) popup.classList.add('is-leaving');
+
+        setTimeout(() => {
+          overlay.classList.remove('is-active');
+
+          // ── Step 2: Restore page content with stagger ──
+          dissolveTargets.forEach((el, i) => {
+            el.classList.remove('zl-dissolving');
+            el.style.animationDelay = `${i * 0.1}s`;
+            el.classList.add('zl-restoring');
+          });
+
+          // Clean up classes after animation completes
+          setTimeout(() => {
+            dissolveTargets.forEach(el => {
+              el.classList.remove('zl-restoring');
+              el.style.animationDelay = '';
+            });
+          }, 600);
+
+          document.body.style.overflow = '';
+        }, 350);
+      }
+
+      async function go() {
+        const parsed = parseInput(input.value);
+        if (!parsed) {
+          errEl.textContent = 'Enter a GitHub username (torvalds), repo URL (github.com/user/repo), or a live site URL.';
+          errEl.classList.remove('hidden');
+          return;
         }
         errEl.classList.add('hidden');
         btn.disabled = true;
         input.disabled = true;
+
+        // Build combined claim from resume + manual text
+        const claimVal = buildClaim();
         try {
-            const claimVal = (claimInput?.value || '').trim();
-            if (claimVal) sessionStorage.setItem('zl:claim', claimVal);
-            else sessionStorage.removeItem('zl:claim');
-        } catch {}
-        showLoader(user);
+          const manual = (claimInput?.value || '').trim();
+          if (manual) sessionStorage.setItem('zl:claim', manual);
+          else sessionStorage.removeItem('zl:claim');
+        } catch { }
+
         try {
-            await window.ZL.fetchAnalysis(user);
+          if (parsed.type === 'handle') {
+            showLoader(`Analyzing @${parsed.value}`, 'handle');
+            // Store claim for the audit page to pick up
+            if (claimVal) try { sessionStorage.setItem('zl:claim', claimVal); } catch { }
+            await window.ZL.fetchAnalysis(parsed.value);
             completeAllStages();
             setTimeout(() => {
-                window.location.href = `dashboard.html?u=${encodeURIComponent(user)}`;
+              window.location.href = `dashboard.html?u=${encodeURIComponent(parsed.value)}`;
             }, 250);
+
+          } else if (parsed.type === 'repo') {
+            showLoader(`Auditing ${parsed.owner}/${parsed.repo}`, 'repo');
+            await window.ZL.fetchRepoAudit(parsed.owner, parsed.repo, claimVal);
+            completeAllStages();
+            setTimeout(() => {
+              window.location.href = `audit.html?mode=repo&owner=${encodeURIComponent(parsed.owner)}&repo=${encodeURIComponent(parsed.repo)}`;
+            }, 250);
+
+          } else if (parsed.type === 'url') {
+            showLoader(`Scanning ${new URL(parsed.value).hostname}`, 'url');
+            await window.ZL.fetchUrlAudit(parsed.value, claimVal);
+            completeAllStages();
+            setTimeout(() => {
+              window.location.href = `audit.html?mode=url&url=${encodeURIComponent(parsed.value)}`;
+            }, 250);
+          }
         } catch (err) {
-            hideLoader();
-            btn.disabled = false;
-            input.disabled = false;
-            const msg = err && err.status === 404
-                ? `No GitHub user named "${user}".`
-                : (err && err.message) || 'Analysis failed. Please try again.';
-            errEl.textContent = msg;
-            errEl.classList.remove('hidden');
+          // Show error INSIDE the loader overlay (don't hide it)
+          clearStageTimers();
+          console.error('[ZeroLabs] Analysis error:', err?.status, err?.message);
+          const loaderSpinner = overlay.querySelector('svg');
+          const loaderStages = document.getElementById('zl-loader-stages');
+          const loaderHint = document.getElementById('zl-loader-hint');
+          const loaderError = document.getElementById('zl-loader-error');
+          const loaderErrorMsg = document.getElementById('zl-loader-error-msg');
+
+          // Hide spinner and stages, show error
+          if (loaderSpinner) loaderSpinner.classList.add('hidden');
+          if (loaderStages) loaderStages.classList.add('hidden');
+          if (loaderHint) loaderHint.classList.add('hidden');
+
+          const isRateLimit = (err && err.status === 429) || (err && err.message && (err.message.includes('rate_limited') || err.message.includes('rate limit') || err.message.includes('429')));
+          const is404 = err && err.status === 404;
+          const msg = is404
+            ? `Not found: "${input.value.trim()}". Check the username or URL.`
+            : isRateLimit
+              ? 'AI service is temporarily rate-limited (free tier: ~10 req/min). Please wait 30–60 seconds and click Retry.'
+              : (err && err.message) || 'Analysis failed. Please try again.';
+
+          if (loaderErrorMsg) loaderErrorMsg.textContent = msg;
+          if (loaderError) loaderError.classList.remove('hidden');
+
+          // Wire retry button
+          const retryBtn = document.getElementById('zl-loader-retry');
+          const dismissBtn = document.getElementById('zl-loader-dismiss');
+          if (retryBtn) {
+            retryBtn.onclick = () => {
+              // Reset error state in-place — don't hide the overlay to avoid flashing index page
+              if (loaderSpinner) loaderSpinner.classList.remove('hidden');
+              if (loaderStages) loaderStages.classList.remove('hidden');
+              if (loaderHint) loaderHint.classList.remove('hidden');
+              if (loaderError) loaderError.classList.add('hidden');
+              btn.disabled = false;
+              input.disabled = false;
+              go();
+            };
+          }
+          if (dismissBtn) {
+            dismissBtn.onclick = () => {
+              hideLoader();
+              btn.disabled = false;
+              input.disabled = false;
+              // Also show error below input
+              errEl.textContent = msg;
+              errEl.classList.remove('hidden');
+              // Reset loader state for next attempt
+              if (loaderSpinner) loaderSpinner.classList.remove('hidden');
+              if (loaderStages) loaderStages.classList.remove('hidden');
+              if (loaderHint) loaderHint.classList.remove('hidden');
+              if (loaderError) loaderError.classList.add('hidden');
+            };
+          }
         }
-    }
+      }
 
-    btn.addEventListener('click', go);
-    input.addEventListener('keydown', (e) => { if (e.key === 'Enter') go(); });
-})();
-</script>
-</body></html>
+      btn.addEventListener('click', go);
+      input.addEventListener('keydown', (e) => { if (e.key === 'Enter') go(); });
+    })();
+  </script>
+</body>
 
-
-
-
-
+</html>

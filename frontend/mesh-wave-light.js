@@ -1,15 +1,16 @@
-// mesh-wave.js (dark theme)
+// mesh-wave-light.js (light theme)
 
-(function meshWaveDark() {
+(function meshWaveLight() {
     const container = document.getElementById('canvas-container');
 
     // 1. Scene, Camera, Renderer setup
     const scene = new THREE.Scene();
     
-    // Dark blue/black background
-    const bgColor = new THREE.Color(0x01030d); 
+    // Light grayish white background
+    const bgColor = new THREE.Color(0xf8f9fa); 
     scene.background = bgColor;
-    scene.fog = new THREE.FogExp2(bgColor, 0.008);
+    // Fog to fade layers into the distance smoothly
+    scene.fog = new THREE.FogExp2(bgColor, 0.008); 
 
     const camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 1, 1000);
     // Position camera to look down slightly at the terrain valley
@@ -32,7 +33,7 @@
         originalPositions[i] = vertexArray[i];
     }
 
-    // 3. Premium Gradient Shader (Neon Blue, Cyan, White Glow)
+    // 3. Premium Gradient Shader (Light theme: crisp blues)
     const vertexShader = `
         varying vec3 vPosition;
         varying float vHeight;
@@ -61,11 +62,27 @@
                 if (length(coord) > 0.5) discard;
             }
             
-            vec3 colorDeep = vec3(0.0, 0.1, 0.4);
-            vec3 colorMid = vec3(0.0, 0.4, 0.9);
-            vec3 colorPeak = vec3(0.0, 1.0, 1.0);
-            vec3 colorGlow = vec3(1.0, 1.0, 1.0);
+            // Ocean to AI Network colors (Light Theme Edition)
+            vec3 colorDeep = vec3(0.9, 0.94, 0.98); // Very light blue for valleys
+            vec3 colorMid = vec3(0.5, 0.7, 0.95);   // Soft calm blue
+            vec3 colorPeak = vec3(0.1, 0.4, 0.9);   // Primary Blue
+            vec3 colorGlow = vec3(0.0, 0.9, 1.0);   // Neon Cyan
             
+            // Slight Neon RGB Texture (Red, Green, Blue mapping)
+            float texR = sin(vPosition.x * 0.02 + vPosition.z * 0.01) * 0.5 + 0.5;
+            float texG = cos(vPosition.x * 0.015 - vPosition.z * 0.025) * 0.5 + 0.5;
+            float texB = sin(vPosition.x * 0.03 + vPosition.z * 0.03) * 0.5 + 0.5;
+            
+            vec3 neonR = vec3(1.0, 0.1, 0.3);   // Neon Red
+            vec3 neonG = vec3(0.1, 1.0, 0.3);   // Neon Green
+            vec3 neonB = vec3(0.1, 0.4, 1.0);   // Neon Blue
+            
+            // Mix the RGB neons into the overall gradient to create the slight texture
+            colorDeep = mix(colorDeep, neonB, texB * 0.3);     // Deep neon blue texture
+            colorMid = mix(colorMid, neonG, texG * 0.3);       // Slight green sweeps
+            colorPeak = mix(colorPeak, neonR, texR * 0.4);     // Red/magenta peaks
+            
+            // Normalize height (assuming wave height from -5 to 15)
             float h = clamp((vHeight + 5.0) / 15.0, 0.0, 1.0);
             
             vec3 finalColor;
@@ -77,6 +94,12 @@
                 finalColor = mix(colorPeak, colorGlow, (h - 0.85) * 6.66);
             }
             
+            if (uIsPoint > 0.5) {
+                // Dim nodes significantly to make the dots much darker
+                finalColor *= mix(0.1, 0.35, h); 
+            }
+            
+            // Fade into the background far away
             float distanceFade = smoothstep(180.0, 10.0, length(vPosition.xz));
             
             gl_FragColor = vec4(finalColor, uOpacity * distanceFade);
@@ -93,7 +116,8 @@
         },
         transparent: true,
         depthWrite: false,
-        blending: THREE.AdditiveBlending
+        // Used NormalBlending for light theme instead of Additive to prevent blowing out to white
+        blending: THREE.NormalBlending 
     });
 
     // Connecting Lines
@@ -106,7 +130,7 @@
         },
         transparent: true,
         depthWrite: false,
-        blending: THREE.AdditiveBlending,
+        blending: THREE.NormalBlending,
         wireframe: true
     });
 
@@ -126,11 +150,11 @@
     }
     pGeometry.setAttribute('position', new THREE.BufferAttribute(pPosArray, 3));
     const pMaterial = new THREE.PointsMaterial({
-        color: 0x00ffff,
-        size: 0.35,
+        color: 0x050f24, // Very dark, almost black-blue for floating dots
+        size: 0.45, // Slightly larger to sit against light bg
         transparent: true,
-        opacity: 0.4,
-        blending: THREE.AdditiveBlending,
+        opacity: 0.25,
+        blending: THREE.NormalBlending,
         depthWrite: false
     });
     const floatingParticles = new THREE.Points(pGeometry, pMaterial);

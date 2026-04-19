@@ -1,5 +1,9 @@
 // audit.js
-// Renders the 360 Audit page from the audit endpoint.
+// Renders the 360 Audit page.
+// Supports three modes (via ?mode= query param):
+//   - profile (default) — full-profile 360 audit
+//   - repo — single-repo deep audit
+//   - url — live URL stack scan
 
 (function () {
     const EVIDENCE_STYLES = {
@@ -21,6 +25,21 @@
     };
 
     function $(id) { return document.getElementById(id); }
+
+    function getMode() {
+        const params = new URLSearchParams(window.location.search);
+        return params.get('mode') || 'profile';
+    }
+
+    function getRepoParams() {
+        const params = new URLSearchParams(window.location.search);
+        return { owner: params.get('owner') || '', repo: params.get('repo') || '' };
+    }
+
+    function getUrlParam() {
+        const params = new URLSearchParams(window.location.search);
+        return params.get('url') || '';
+    }
 
     function showLoading() {
         $('zl-audit-loading')?.classList.remove('hidden');
@@ -184,6 +203,34 @@
         }
     }
 
+    function renderRedFlags(flags) {
+        const host = $('zl-audit-red-flags');
+        if (!host) return;
+        host.innerHTML = '';
+        const severityStyle = {
+            critical: 'bg-error/10 text-error border-error/30',
+            major: 'bg-secondary/10 text-secondary border-secondary/30',
+            minor: 'bg-tertiary/10 text-tertiary border-tertiary/30'
+        };
+        (flags || []).forEach(f => {
+            const style = severityStyle[f.severity] || severityStyle.minor;
+            const card = document.createElement('div');
+            card.className = 'glass-card p-4 rounded-lg ghost-border';
+            card.innerHTML = `
+                <div class="flex items-center gap-3 mb-2">
+                    <span class="material-symbols-outlined text-error text-base">warning</span>
+                    <span class="text-sm font-semibold text-on-surface">${ZL.escapeHtml(f.pattern)}</span>
+                    <span class="px-2 py-0.5 text-[10px] font-bold rounded border uppercase tracking-wider ${style}">${ZL.escapeHtml(f.severity)}</span>
+                    <span class="text-[10px] text-on-surface-variant font-mono ml-auto">${ZL.escapeHtml(f.repo)}</span>
+                </div>
+                <p class="text-xs text-on-surface-variant leading-relaxed ml-7">${ZL.escapeHtml(f.blast_radius)}</p>`;
+            host.appendChild(card);
+        });
+        if (!host.children.length) {
+            host.innerHTML = '<p class="text-xs text-on-surface-variant">No red flags detected — clean code.</p>';
+        }
+    }
+
     function renderFiles(sampled) {
         const host = $('zl-audit-files');
         if (!host) return;
@@ -200,6 +247,110 @@
         }
     }
 
+    /** Render the URL scan details section (only for mode=url) */
+    function renderUrlScan(data) {
+        const section = $('zl-audit-url-scan');
+        if (!section) return;
+        section.classList.remove('hidden');
+
+        const stack = data.stack_detected || {};
+        const metrics = data.surface_metrics || {};
+        const frameworks = (stack.frameworks || []).map(f => ZL.escapeHtml(f));
+        const indicators = (stack.indicators || []).map(i => ZL.escapeHtml(i));
+        const meta = stack.meta || {};
+
+        section.innerHTML = `
+            <!-- Limited evidence banner -->
+            <div class="flex items-center gap-3 px-4 py-3 rounded-lg bg-secondary/10 border border-secondary/20 mb-6">
+                <span class="material-symbols-outlined text-secondary text-xl">link</span>
+                <div>
+                    <div class="text-sm font-semibold text-secondary">Live URL Scan · Limited Evidence</div>
+                    <div class="text-xs text-on-surface-variant">We scanned the deployed HTML&hairsp;—&hairsp;server-side architecture, database design, and backend code are invisible from this vantage point.</div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Stack detected -->
+                <div class="glass-card p-5 rounded-lg ghost-border">
+                    <h3 class="text-xs font-bold uppercase text-on-surface-variant mb-4 tracking-widest flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm text-primary">layers</span>
+                        Detected Stack
+                    </h3>
+                    ${frameworks.length
+                        ? `<div class="flex flex-wrap gap-2 mb-4">${frameworks.map(f =>
+                            `<span class="px-3 py-1 rounded-full bg-primary/15 text-primary text-xs font-semibold border border-primary/20">${f}</span>`
+                        ).join('')}</div>`
+                        : '<div class="text-xs text-on-surface-variant mb-4">No frameworks detected from the HTML.</div>'
+                    }
+                    ${meta.title ? `<div class="text-xs text-on-surface-variant"><span class="font-semibold text-on-surface">Title:</span> ${ZL.escapeHtml(meta.title)}</div>` : ''}
+                    ${meta.generator ? `<div class="text-xs text-on-surface-variant mt-1"><span class="font-semibold text-on-surface">Generator:</span> ${ZL.escapeHtml(meta.generator)}</div>` : ''}
+                    ${meta.server ? `<div class="text-xs text-on-surface-variant mt-1"><span class="font-semibold text-on-surface">Server:</span> ${ZL.escapeHtml(meta.server)}</div>` : ''}
+                    ${meta.powered_by ? `<div class="text-xs text-on-surface-variant mt-1"><span class="font-semibold text-on-surface">Powered by:</span> ${ZL.escapeHtml(meta.powered_by)}</div>` : ''}
+                </div>
+
+                <!-- Surface metrics -->
+                <div class="glass-card p-5 rounded-lg ghost-border">
+                    <h3 class="text-xs font-bold uppercase text-on-surface-variant mb-4 tracking-widest flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm text-tertiary">speed</span>
+                        Surface Metrics
+                    </h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <div class="text-2xl font-bold text-on-surface">${metrics.response_time_ms || '--'}<span class="text-xs font-normal text-on-surface-variant">ms</span></div>
+                            <div class="text-[10px] uppercase tracking-widest text-on-surface-variant">Response Time</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-bold text-on-surface">${metrics.content_length_kb || '--'}<span class="text-xs font-normal text-on-surface-variant">KB</span></div>
+                            <div class="text-[10px] uppercase tracking-widest text-on-surface-variant">Page Size</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-bold ${metrics.has_ssl ? 'text-tertiary' : 'text-error'}">${metrics.has_ssl ? '✓ SSL' : '✗ No SSL'}</div>
+                            <div class="text-[10px] uppercase tracking-widest text-on-surface-variant">HTTPS</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-bold text-on-surface">${metrics.status_code || '--'}</div>
+                            <div class="text-[10px] uppercase tracking-widest text-on-surface-variant">Status</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quality indicators -->
+            ${indicators.length ? `
+            <div class="mt-4 glass-card p-5 rounded-lg ghost-border">
+                <h3 class="text-xs font-bold uppercase text-on-surface-variant mb-3 tracking-widest">Quality Indicators</h3>
+                <div class="flex flex-wrap gap-2">
+                    ${indicators.map(ind => {
+                        const isWarning = ind.startsWith('⚠');
+                        return `<span class="px-2 py-1 rounded text-[11px] font-medium ${isWarning ? 'bg-error/10 text-error border border-error/20' : 'bg-tertiary/10 text-tertiary border border-tertiary/20'}">${ind}</span>`;
+                    }).join('')}
+                </div>
+            </div>` : ''}
+        `;
+    }
+
+    /** Render repo metadata badge (only for mode=repo) */
+    function renderRepoMeta(repoMeta) {
+        const section = $('zl-audit-repo-meta');
+        if (!section || !repoMeta) return;
+        section.classList.remove('hidden');
+
+        section.innerHTML = `
+            <div class="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary/10 border border-primary/20 mb-6">
+                <span class="material-symbols-outlined text-primary text-xl">folder_open</span>
+                <div class="flex-1">
+                    <div class="text-sm font-semibold text-primary">Single Repository Audit</div>
+                    <div class="text-xs text-on-surface-variant">
+                        <a href="${ZL.escapeHtml(repoMeta.html_url || '')}" target="_blank" rel="noopener" class="hover:text-primary transition-colors">${ZL.escapeHtml(repoMeta.full_name || '')}</a>
+                        ${repoMeta.language ? ` · ${ZL.escapeHtml(repoMeta.language)}` : ''}
+                        ${repoMeta.stars ? ` · ⭐ ${repoMeta.stars}` : ''}
+                        ${repoMeta.description ? ` — ${ZL.escapeHtml(repoMeta.description)}` : ''}
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
     function applySidebar(profile, analysis) {
         const sideName = $('zl-sidebar-name');
         const sideVel = $('zl-sidebar-velocity');
@@ -211,41 +362,132 @@
     }
 
     async function init() {
-        const username = ZL.getUsername();
-        if (!username) { window.location.href = 'index.html'; return; }
-        showLoading();
-        try {
-            const [auditData, analysisData] = await Promise.all([
-                ZL.fetchAudit(username),
-                ZL.fetchAnalysis(username).catch(() => null)
-            ]);
-            const report = auditData?.analysis;
-            const claim = (auditData?.claim || '').trim();
-            const sub = $('zl-audit-sub');
-            if (sub) {
-                sub.textContent = claim
-                    ? `Claim: ${claim.length > 220 ? claim.slice(0, 220) + '...' : claim}`
-                    : 'Cross-referencing your stated experience against the code in your repos.';
+        const mode = getMode();
+
+        if (mode === 'url') {
+            // --- URL scan mode ---
+            const url = getUrlParam();
+            if (!url) { window.location.href = 'index.html'; return; }
+            showLoading();
+
+            // Update loading text
+            const loadingTitle = document.querySelector('#zl-audit-loading h1');
+            if (loadingTitle) loadingTitle.textContent = 'Scanning live URL';
+            const loadingDesc = document.querySelector('#zl-audit-loading p');
+            if (loadingDesc) loadingDesc.innerHTML = `Fetching <strong>${ZL.escapeHtml(new URL(url).hostname)}</strong>, detecting stack, and running AI analysis.<br>This usually takes 10–30 seconds.`;
+
+            try {
+                const auditData = await ZL.fetchUrlAudit(url);
+                const report = auditData?.analysis;
+
+                const sub = $('zl-audit-sub');
+                const header = document.querySelector('#zl-audit-report h1');
+                if (header) header.textContent = 'URL Stack Audit';
+                if (sub) sub.textContent = `Scanning ${ZL.escapeHtml(new URL(url).hostname)} for stack signals and engineering quality.`;
+
+                renderUrlScan(auditData);
+                renderVerdict(report?.verdict);
+                renderClaimedSkills(report?.claim_vs_actual?.claimed_skills);
+                renderContradictions(report?.claim_vs_actual?.contradictions);
+                renderCodeReview(report?.code_review);
+                renderStrengths(report?.strengths);
+                renderElevation(report?.elevation_path);
+                renderRedFlags(report?.technical_red_flags);
+
+                // Hide files-sampled section for URL mode
+                const filesSection = $('zl-audit-files')?.closest('section');
+                if (filesSection) filesSection.classList.add('hidden');
+
+                showReport();
+            } catch (err) {
+                console.error('[ZeroLabs] URL audit failed:', err);
+                showError((err && err.message) || 'URL scan failed. Please try again.');
             }
 
-            ZL.applyProfile(auditData.profile);
-            applySidebar(auditData.profile, analysisData);
+        } else if (mode === 'repo') {
+            // --- Single-repo audit mode ---
+            const { owner, repo } = getRepoParams();
+            if (!owner || !repo) { window.location.href = 'index.html'; return; }
+            showLoading();
 
-            renderVerdict(report?.verdict);
-            renderClaimedSkills(report?.claim_vs_actual?.claimed_skills);
-            renderContradictions(report?.claim_vs_actual?.contradictions);
-            renderCodeReview(report?.code_review);
-            renderStrengths(report?.strengths);
-            renderElevation(report?.elevation_path);
-            renderFiles(auditData?.repos_sampled);
+            const loadingTitle = document.querySelector('#zl-audit-loading h1');
+            if (loadingTitle) loadingTitle.textContent = 'Deep auditing repository';
+            const loadingDesc = document.querySelector('#zl-audit-loading p');
+            if (loadingDesc) loadingDesc.innerHTML = `Reading files from <strong>${ZL.escapeHtml(owner)}/${ZL.escapeHtml(repo)}</strong> and running staff-level code review.<br>This usually takes 20–60 seconds.`;
 
-            showReport();
-        } catch (err) {
-            console.error('[ZeroLabs] audit failed:', err);
-            const msg = err && err.status === 404
-                ? `No GitHub user named "${username}".`
-                : (err && err.message) || 'Audit failed. Please try again.';
-            showError(msg);
+            try {
+                const auditData = await ZL.fetchRepoAudit(owner, repo);
+                const report = auditData?.analysis;
+                const claim = (auditData?.claim || '').trim();
+                const sub = $('zl-audit-sub');
+                if (sub) {
+                    sub.textContent = claim
+                        ? `Claim: ${claim.length > 220 ? claim.slice(0, 220) + '...' : claim}`
+                        : `Deep audit of ${owner}/${repo} — reading real source files.`;
+                }
+
+                if (auditData.profile) {
+                    ZL.applyProfile(auditData.profile);
+                }
+                applySidebar(auditData.profile);
+                renderRepoMeta(auditData.repo_meta);
+                renderVerdict(report?.verdict);
+                renderClaimedSkills(report?.claim_vs_actual?.claimed_skills);
+                renderContradictions(report?.claim_vs_actual?.contradictions);
+                renderCodeReview(report?.code_review);
+                renderStrengths(report?.strengths);
+                renderElevation(report?.elevation_path);
+                renderRedFlags(report?.technical_red_flags);
+                renderFiles(auditData?.repos_sampled);
+
+                showReport();
+            } catch (err) {
+                console.error('[ZeroLabs] repo audit failed:', err);
+                const msg = err && err.status === 404
+                    ? `Repository "${owner}/${repo}" not found.`
+                    : (err && err.message) || 'Audit failed. Please try again.';
+                showError(msg);
+            }
+
+        } else {
+            // --- Default profile audit mode ---
+            const username = ZL.getUsername();
+            if (!username) { window.location.href = 'index.html'; return; }
+            showLoading();
+            try {
+                const [auditData, analysisData] = await Promise.all([
+                    ZL.fetchAudit(username),
+                    ZL.fetchAnalysis(username).catch(() => null)
+                ]);
+                const report = auditData?.analysis;
+                const claim = (auditData?.claim || '').trim();
+                const sub = $('zl-audit-sub');
+                if (sub) {
+                    sub.textContent = claim
+                        ? `Claim: ${claim.length > 220 ? claim.slice(0, 220) + '...' : claim}`
+                        : 'Cross-referencing your stated experience against the code in your repos.';
+                }
+
+                ZL.applyProfile(auditData.profile);
+                applySidebar(auditData.profile, analysisData);
+
+                renderVerdict(report?.verdict);
+                renderClaimedSkills(report?.claim_vs_actual?.claimed_skills);
+                renderContradictions(report?.claim_vs_actual?.contradictions);
+                renderCodeReview(report?.code_review);
+                renderStrengths(report?.strengths);
+                renderElevation(report?.elevation_path);
+                renderRedFlags(report?.technical_red_flags);
+                renderFiles(auditData?.repos_sampled);
+
+                showReport();
+            } catch (err) {
+                console.error('[ZeroLabs] audit failed:', err);
+                const msg = err && err.status === 404
+                    ? `No GitHub user named "${username}".`
+                    : (err && err.message) || 'Audit failed. Please try again.';
+                showError(msg);
+            }
         }
     }
 

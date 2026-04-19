@@ -121,6 +121,7 @@
         }
     </style>
     <link rel="stylesheet" href="zerolabs.css">
+    <script src="theme.js"></script>
     <link rel="stylesheet" href="transitions.css">
 </head>
 
@@ -155,9 +156,9 @@
                     </button>
                     <div
                         class="w-8 h-8 rounded-full bg-gradient-to-tr from-primary to-secondary overflow-hidden ml-2 border border-outline-variant/30">
-                        <img alt="Developer Profile Avatar"
-                            class="w-full h-full object-cover mix-blend-overlay opacity-80"
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQMr8Bs8pG23Tl15lCe8yqUdu1ZcJAfrCPpG-0Ei63ZsSmxRalQoyDgGOT1itgD6uWZkoFI86G2_Nh1R2HLYd2XQryu8sMFyf_gHKC2DqEZ4gddgFVia8E7tiZXuEBsiQyqljAZi3DuxZZ-gEKAv7Mmw5aBEkSyEMIL1k83U-Iqx8iUOizVP4ltE3DALTwbGiQsJuWScqXqbz7cNmmq4xvypu78RX4sVa3-4ZRBepM_78bStuzVFWY_68zpOBed9W86CqWv5cJgBM" />
+                        <img alt="Developer Profile Avatar" data-zl-avatar
+                            class="w-full h-full object-cover"
+                            src="" />
                     </div>
                 </div>
             </div>
@@ -168,17 +169,17 @@
         class="bg-[#1C1B1B] text-[#ADC6FF] font-['Inter'] text-sm font-medium fixed left-0 top-0 pt-20 pb-8 px-4 space-y-2 h-screen w-64 hidden md:flex flex-col z-40">
         <div class="mb-8 px-4">
             <div class="flex items-center gap-3 mb-6">
-                <img alt="User Avatar" class="w-10 h-10 rounded-full object-cover border border-outline-variant/20"
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnDwJ5c3Ldn-jmTVY_JUJmng8db5T3bubUi9Xk-e-yogDxrmxQxUqFStgx6ovJszObWpDDZvDx7GsM0i_7V7UbaLScYmhmuGnXgENiF23doNwcBRshR_M3DJVQ5Qzfiqb5rz--k7ZGvuF09hD1YSYYuGEaxKNF10rNOxM2nPL35MIew4W8kT8ECGHDOp3WcWuVC-_tBFLL1_N7k4h2MlKbhLfoOPjOa6u0SbQ-7iBFMmksfgefzrOv458gov-oIkY-hOtO0efJPxE" />
+                <img alt="User Avatar" data-zl-avatar class="w-10 h-10 rounded-full object-cover border border-outline-variant/20"
+                    src="" />
                 <div>
                     <h2 id="zl-sidebar-name" class="text-on-surface font-semibold text-base leading-tight">Developer Intelligence</h2>
                     <p id="zl-sidebar-velocity" class="text-on-surface-variant text-xs">Career Velocity: --</p>
                 </div>
             </div>
-            <button
-                class="w-full bg-gradient-to-r from-primary to-primary-container text-on-primary font-semibold py-2 px-4 rounded hover:shadow-[0_0_15px_rgba(173,198,255,0.2)] transition-all flex items-center justify-center gap-2">
-                <span class="material-symbols-outlined text-sm">add</span> Analyze New Repo
-            </button>
+            <a href="index.html"
+                class="w-full bg-gradient-to-r from-primary to-primary-container text-on-primary font-semibold py-2 px-4 rounded hover:shadow-[0_0_15px_rgba(173,198,255,0.2)] transition-all flex items-center justify-center gap-2 no-underline">
+                <span class="material-symbols-outlined text-sm">person_search</span> Analyze New User
+            </a>
         </div>
         <div class="flex-1 space-y-1">
             <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-[#C7C4D8] hover:bg-[#2A2A2A]/50 hover:translate-x-1 transition-transform duration-300 cursor-pointer transition-all"
@@ -218,10 +219,11 @@
             </a>
         </div> -->
     </nav>
-    <main class="flex overflow-hidden md:ml-64 pt-24">
+    <main class="flex md:ml-64 pt-16 h-screen overflow-hidden">
+        <!-- Queue panel — fixed width, scrollable list -->
         <aside
-            class="w-[30%] min-w-[320px] bg-surface-container-low border-r border-outline-variant/20 flex flex-col interactive-card">
-            <div class="p-4 border-b border-outline-variant/10 flex items-center justify-between">
+            class="w-80 shrink-0 bg-surface-container-high flex flex-col border-r-2 border-outline-variant/30" style="box-shadow: 4px 0 16px rgba(0,0,0,0.4);">
+            <div class="p-4 border-b border-outline-variant/20 flex items-center justify-between shrink-0">
                 <div>
                     <h1 class="text-sm font-bold uppercase tracking-widest text-on-surface-variant">Matches Queue</h1>
                     <div class="flex items-center gap-2 mt-1">
@@ -234,17 +236,28 @@
                     <span class="material-symbols-outlined text-[18px]">tune</span>
                 </button>
             </div>
-            <div id="zl-matches-queue" class="flex-1 overflow-y-auto p-3 space-y-3"></div>
+            <div id="zl-matches-queue" class="flex-1 overflow-y-auto p-3 space-y-3 min-h-0"></div>
             <div
-                class="p-4 bg-surface-container-lowest border-t border-outline-variant/20 text-[10px] font-mono text-on-surface-variant flex justify-between interactive-card">
-                <span>SYS_VELOCITY: 84%</span>
-                <span>LATENCY: 12ms</span>
+                class="p-3 bg-surface-container-lowest border-t border-outline-variant/20 text-[10px] font-mono text-on-surface-variant shrink-0 flex justify-between interactive-card">
+                <span>SYS_VELOCITY: --</span>
+                <span id="zl-queue-source">CORPUS: --</span>
             </div>
         </aside>
-        <section class="flex-1 bg-background overflow-y-auto relative">
-            <div id="zl-match-detail"></div>
+
+        <!-- Detail panel — flexible, independently scrollable -->
+        <section class="flex-1 bg-background overflow-y-auto relative min-w-0">
+            <div id="zl-match-detail" class="min-h-full">
+                <!-- Loading skeleton shown until JS renders real content -->
+                <div id="zl-detail-skeleton" class="p-12 space-y-6 animate-pulse">
+                    <div class="h-4 bg-surface-container-highest rounded w-24"></div>
+                    <div class="h-12 bg-surface-container-highest rounded w-2/3"></div>
+                    <div class="h-4 bg-surface-container-highest rounded w-1/3"></div>
+                    <div class="h-4 bg-surface-container-highest rounded w-1/2 mt-8"></div>
+                    <div class="h-20 bg-surface-container-highest rounded"></div>
+                </div>
+            </div>
             <footer
-                class="p-8 md:p-12 pt-12 text-[10px] font-mono text-on-surface-variant/40 border-t border-outline-variant/10 flex justify-between">
+                class="px-8 md:px-12 py-8 text-[10px] font-mono text-on-surface-variant/40 border-t border-outline-variant/10 flex justify-between">
                 <span>© 2026 ZeroLabs // COMMAND_CONSOLE_v1.0.4</span>
                 <div class="flex gap-4">
                     <a class="hover:text-primary transition-colors" href="#">DOCUMENTATION</a>

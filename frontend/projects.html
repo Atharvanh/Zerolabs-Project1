@@ -192,6 +192,7 @@
     </style>
 
     <link rel="stylesheet" href="zerolabs.css">
+    <script src="theme.js"></script>
     <link rel="stylesheet" href="transitions.css">
 </head>
 
@@ -207,7 +208,7 @@
                 class="material-symbols-outlined hover:text-[#ADC6FF] hover:bg-white/5 transition-all active:scale-95 duration-200 cursor-pointer">notifications</span>
             <span
                 class="material-symbols-outlined hover:text-[#ADC6FF] hover:bg-white/5 transition-all active:scale-95 duration-200 cursor-pointer">settings</span>
-            <img alt="Developer Profile Avatar" class="w-8 h-8 rounded-full border ghost-border"
+            <img alt="Developer Profile Avatar" data-zl-avatar class="w-8 h-8 rounded-full border ghost-border"
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuBG-J_BOLQc_ifSJ7GgukD-fniakD8iG2Ul0XjySLNr2h8cXg7fTVvf1ilmXUJYZXWt7cnlpkz792_3M_36u9v2GQFwHBb99H4-9IvW5OkqrdA-WhIPacKrdDGFmb84j8ncvh8PgjopAxL1hlxzl08FlvnsYYByizmSsmcMbfJB0TzJNCQcNuiMfW8SVSUerQC2nDksgnGRxN7YS2kP1thIkaaFz2tLoE6ItMVJEh6fNPwFq0NbmQsHSsGsxA_YD41jNQWpZOD-Id0" />
         </div>
     </header>
@@ -216,17 +217,17 @@
         class="bg-[#1C1B1B] text-[#ADC6FF] font-['Inter'] text-sm font-medium fixed left-0 top-0 pt-20 pb-8 px-4 space-y-2 h-screen w-64 hidden md:flex flex-col flat no-border z-40">
         <div class="mb-8 px-4">
             <div class="flex items-center gap-3 mb-6">
-                <img alt="User Avatar" class="w-10 h-10 rounded-full object-cover border border-outline-variant/20"
+                <img alt="User Avatar" data-zl-avatar class="w-10 h-10 rounded-full object-cover border border-outline-variant/20"
                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnDwJ5c3Ldn-jmTVY_JUJmng8db5T3bubUi9Xk-e-yogDxrmxQxUqFStgx6ovJszObWpDDZvDx7GsM0i_7V7UbaLScYmhmuGnXgENiF23doNwcBRshR_M3DJVQ5Qzfiqb5rz--k7ZGvuF09hD1YSYYuGEaxKNF10rNOxM2nPL35MIew4W8kT8ECGHDOp3WcWuVC-_tBFLL1_N7k4h2MlKbhLfoOPjOa6u0SbQ-7iBFMmksfgefzrOv458gov-oIkY-hOtO0efJPxE" />
                 <div>
                     <h2 id="zl-sidebar-name" class="text-on-surface font-semibold text-base">Developer Intelligence</h2>
                     <p id="zl-sidebar-velocity" class="text-on-surface-variant text-xs">Career Velocity: --</p>
                 </div>
             </div>
-            <button
-                class="w-full bg-gradient-to-r from-primary to-primary-container text-on-primary font-semibold py-2 px-4 rounded hover:shadow-[0_0_15px_rgba(173,198,255,0.2)] transition-all flex items-center justify-center gap-2">
-                <span class="material-symbols-outlined text-sm">add</span> Analyze New Repo
-            </button>
+            <a href="index.html"
+                class="w-full bg-gradient-to-r from-primary to-primary-container text-on-primary font-semibold py-2 px-4 rounded hover:shadow-[0_0_15px_rgba(173,198,255,0.2)] transition-all flex items-center justify-center gap-2 no-underline">
+                <span class="material-symbols-outlined text-sm">person_search</span> Analyze New User
+            </a>
         </div>
         <div class="flex-1 space-y-1">
             <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-[#C7C4D8] hover:bg-[#2A2A2A]/50 hover:translate-x-1 transition-transform duration-300 cursor-pointer transition-all"

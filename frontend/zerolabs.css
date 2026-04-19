@@ -296,3 +296,231 @@ svg polygon {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
+
+/* ═══════════════════════════════════════════════════════════
+   Phase 6: LIGHT MODE OVERRIDES
+   Activated when html.light is set (by theme.js)
+═══════════════════════════════════════════════════════════ */
+
+/* ── Core surfaces ──────────────────────────────────────── */
+html.light body {
+    background-color: #f8f8fa !important;
+    color: #1a1a2e !important;
+    background-image:
+        radial-gradient(ellipse 80% 50% at 20% -10%, rgba(0, 92, 198, 0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 80% 110%, rgba(0, 110, 75, 0.04) 0%, transparent 60%) !important;
+}
+
+/* ── Scrollbar ──────────────────────────────────────────── */
+html.light ::-webkit-scrollbar-track { background: #f0f0f2; }
+html.light ::-webkit-scrollbar-thumb { background: #c0c0cc; }
+html.light ::-webkit-scrollbar-thumb:hover { background: #a0a0b0; }
+
+/* ── Sidebar ────────────────────────────────────────────── */
+html.light nav.fixed {
+    background: rgba(240, 240, 245, 0.97) !important;
+    border-right: 1px solid rgba(0, 0, 0, 0.08) !important;
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light nav.fixed,
+html.light nav.fixed a {
+    color: #3a3a5c !important;
+}
+
+html.light nav.fixed a:not(.active-nav):hover {
+    background: rgba(0, 92, 198, 0.08) !important;
+    color: #005cc6 !important;
+    box-shadow: inset 0 0 20px rgba(0, 92, 198, 0.05) !important;
+}
+
+html.light nav.fixed a.bg-\[#2A2A2A\] {
+    background: linear-gradient(135deg, rgba(0, 92, 198, 0.12), rgba(0, 92, 198, 0.06)) !important;
+    border: 1px solid rgba(0, 92, 198, 0.2) !important;
+    box-shadow: 0 0 15px rgba(0, 92, 198, 0.08), inset 0 0 10px rgba(0, 92, 198, 0.04) !important;
+    color: #005cc6 !important;
+}
+
+/* Override hardcoded sidebar bg */
+html.light .bg-\[\#1C1B1B\] { background-color: #f0f0f5 !important; }
+html.light .bg-\[\#2A2A2A\] { background-color: rgba(0, 92, 198, 0.08) !important; }
+html.light .bg-\[\#2A2A2A\]\/50 { background-color: rgba(0, 92, 198, 0.04) !important; }
+
+/* ── Header ─────────────────────────────────────────────── */
+html.light header.fixed {
+    background: rgba(248, 248, 250, 0.85) !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* Override hardcoded header bg */
+html.light .bg-\[\#131313\]\/60 { background-color: rgba(248, 248, 250, 0.85) !important; }
+
+/* ── Text color overrides ───────────────────────────────── */
+html.light .text-\[\#E5E2E1\] { color: #1a1a2e !important; }
+html.light .text-\[\#C7C4D8\] { color: #5a5a7a !important; }
+html.light .text-\[\#ADC6FF\] { color: #005cc6 !important; }
+html.light .text-on-surface { color: #1a1a2e !important; }
+html.light .text-on-surface-variant { color: #5a5a7a !important; }
+html.light .text-on-background { color: #1a1a2e !important; }
+
+/* ── Background color overrides ─────────────────────────── */
+html.light .bg-background { background-color: #f8f8fa !important; }
+html.light .bg-surface { background-color: #f8f8fa !important; }
+html.light .bg-surface-dim { background-color: #f0f0f2 !important; }
+html.light .bg-\[\#131313\] { background-color: #f8f8fa !important; }
+html.light .bg-\[\#0e0e0e\] { background-color: #f0f0f2 !important; }
+
+html.light .bg-surface-container-lowest { background-color: #ffffff !important; }
+html.light .bg-surface-container-low { background-color: #f5f5f8 !important; }
+html.light .bg-surface-container { background-color: #ededf2 !important; }
+html.light .bg-surface-container-high { background-color: #e5e5eb !important; }
+html.light .bg-surface-container-highest { background-color: #dddde5 !important; }
+html.light .bg-surface-container-highest\/50 { background-color: rgba(221, 221, 229, 0.5) !important; }
+html.light .bg-surface-variant { background-color: #e0e0e8 !important; }
+
+/* ── Border overrides ───────────────────────────────────── */
+html.light .border-\[\#1C1B1B\] { border-color: rgba(0, 0, 0, 0.08) !important; }
+html.light .border-outline-variant\/10 { border-color: rgba(0, 0, 0, 0.08) !important; }
+html.light .border-outline-variant\/20 { border-color: rgba(0, 0, 0, 0.1) !important; }
+html.light .border-outline-variant\/30 { border-color: rgba(0, 0, 0, 0.12) !important; }
+
+/* ── Card system ──────────────────────────────────────── */
+html.light .glass-card,
+html.light .glass-panel {
+    background-color: rgba(255, 255, 255, 0.8) !important;
+    border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light .glass-card:hover,
+html.light .bg-surface-container-low:hover,
+html.light .bg-surface-container:hover,
+html.light .glass-panel:hover {
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 92, 198, 0.1) !important;
+}
+
+html.light .glass-card::before,
+html.light .bg-surface-container-low::before,
+html.light .bg-surface-container::before,
+html.light .glass-panel::before,
+html.light .interactive-card::before,
+html.light .project-card::before {
+    background: radial-gradient(
+        600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+        rgba(0, 92, 198, 0.06),
+        transparent 50%
+    ) !important;
+}
+
+/* ── Input overrides ──────────────────────────────────── */
+html.light input,
+html.light select,
+html.light textarea {
+    background-color: rgba(255, 255, 255, 0.8) !important;
+    color: #1a1a2e !important;
+    border-color: rgba(0, 0, 0, 0.12) !important;
+}
+
+html.light input::placeholder,
+html.light textarea::placeholder {
+    color: rgba(90, 90, 122, 0.6) !important;
+}
+
+html.light input:focus,
+html.light select:focus,
+html.light textarea:focus {
+    border-color: rgba(0, 92, 198, 0.4) !important;
+    box-shadow: 0 0 0 3px rgba(0, 92, 198, 0.1), 0 0 12px rgba(0, 92, 198, 0.06) !important;
+}
+
+/* ── Tooltip ──────────────────────────────────────────── */
+html.light [data-tip]::after {
+    background: rgba(255, 255, 255, 0.95) !important;
+    color: #1a1a2e !important;
+    border-color: rgba(0, 0, 0, 0.1) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* ── Primary color adjustments ────────────────────────── */
+html.light .text-primary { color: #005cc6 !important; }
+html.light .text-secondary { color: #5516be !important; }
+html.light .text-tertiary { color: #006e4b !important; }
+html.light .text-error { color: #ba1a1a !important; }
+
+html.light .bg-primary\/5 { background-color: rgba(0, 92, 198, 0.05) !important; }
+html.light .bg-primary\/10 { background-color: rgba(0, 92, 198, 0.1) !important; }
+html.light .bg-tertiary\/10 { background-color: rgba(0, 110, 75, 0.1) !important; }
+html.light .bg-secondary\/10 { background-color: rgba(85, 22, 190, 0.1) !important; }
+
+/* ── Black overlays → white overlays ──────────────────── */
+html.light .bg-black\/40 { background-color: rgba(255, 255, 255, 0.6) !important; }
+
+/* ── Footer ───────────────────────────────────────────── */
+html.light footer {
+    background-color: #f0f0f5 !important;
+    border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+/* ── Glow adjustments ────────────────────────────────── */
+html.light .bg-primary\/10 { background-color: rgba(0, 92, 198, 0.08) !important; }
+html.light .bg-tertiary\/10 { background-color: rgba(0, 110, 75, 0.06) !important; }
+
+/* ── Gradient text for light mode ────────────────────── */
+html.light .zl-gradient-text {
+    background: linear-gradient(90deg, #005cc6, #006e4b) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+}
+
+/* ── Spec grid (career matches) ──────────────────────── */
+html.light .spec-grid { background-color: rgba(0, 0, 0, 0.05) !important; }
+html.light .spec-item { background-color: #f8f8fa !important; }
+
+/* ── Index page specific ─────────────────────────────── */
+html.light .bg-\[\#01030d\] { background-color: #f0f2f8 !important; }
+html.light .bg-\[\#0a0a1a\]\/80 { background-color: rgba(245, 245, 248, 0.9) !important; }
+
+/* Index nav bar */
+html.light nav.bg-black\/80 {
+    background-color: rgba(240, 242, 248, 0.9) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* Input bar / resume section backgrounds */
+html.light .bg-black\/70 { background-color: rgba(255, 255, 255, 0.85) !important; }
+html.light .bg-black\/60 { background-color: rgba(255, 255, 255, 0.8) !important; }
+html.light .bg-black\/50 { background-color: rgba(255, 255, 255, 0.75) !important; }
+html.light .bg-black\/40 { background-color: rgba(255, 255, 255, 0.7) !important; }
+html.light .bg-black\/90 { background-color: rgba(255, 255, 255, 0.95) !important; }
+html.light .bg-black\/80 { background-color: rgba(255, 255, 255, 0.9) !important; }
+
+/* Index glass cards in light mode */
+html.light .glass-card {
+    background-color: rgba(255, 255, 255, 0.75) !important;
+    border: 1px solid rgba(0, 0, 0, 0.06) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04) !important;
+}
+
+/* Loader overlay in light mode */
+html.light #zl-loader-overlay {
+    background-color: rgba(240, 242, 248, 0.95) !important;
+}
+
+/* Text gradient for light mode */
+html.light .text-gradient {
+    background: linear-gradient(90deg, #005cc6, #006e4b) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+}
+
+/* ── Smooth transition when toggling ─────────────────── */
+html.light body,
+html.dark body {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+html.light header.fixed,
+html.dark header.fixed,
+html.light nav.fixed,
+html.dark nav.fixed {
+    transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}

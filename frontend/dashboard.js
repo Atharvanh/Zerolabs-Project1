@@ -67,18 +67,19 @@
         const yoy = velocity.yoy ?? 0;
         const bars = Array.isArray(velocity.bars) && velocity.bars.length
             ? velocity.bars.slice(-7)
-            : [20, 30, 40, 45, 55, 60, 70];
+            : [5, 8, 10, 12, 14, 16, 18]; // modest fallback, not optimistic ramp
 
         const scoreEl = $('zl-velocity-score');
         if (scoreEl) scoreEl.textContent = String(score);
 
         const yoyEl = $('zl-velocity-yoy');
         if (yoyEl) {
-            const arrow = yoy >= 0 ? 'trending_up' : 'trending_down';
-            const sign = yoy >= 0 ? '+' : '';
-            const color = yoy >= 0 ? 'text-tertiary' : 'text-error';
+            const arrow = yoy > 0 ? 'trending_up' : yoy < 0 ? 'trending_down' : 'trending_flat';
+            const sign = yoy > 0 ? '+' : '';
+            const color = yoy > 0 ? 'text-tertiary' : yoy < 0 ? 'text-error' : 'text-on-surface-variant';
+            const label = yoy === 0 ? 'No change vs prev year' : `${sign}${yoy}% vs prev year`;
             yoyEl.className = `text-lg font-medium ${color} flex items-center`;
-            yoyEl.innerHTML = `<span class="material-symbols-outlined text-sm mr-1">${arrow}</span>${sign}${yoy}% YoY`;
+            yoyEl.innerHTML = `<span class="material-symbols-outlined text-sm mr-1">${arrow}</span>${label}`;
         }
 
         const sideVel = $('zl-sidebar-velocity');
@@ -172,6 +173,36 @@
         if (el && tip) el.textContent = tip;
     }
 
+    function ordinal(n) {
+        const s = ['th','st','nd','rd'];
+        const v = n % 100;
+        return s[(v - 20) % 10] || s[v] || s[0];
+    }
+
+    function renderPeerPercentile(peer) {
+        if (!peer) return;
+        const overall = $('zl-peer-overall');
+        if (overall) overall.textContent = peer.percentiles.overall;
+
+        // Ordinal suffix
+        const suffix = overall?.nextElementSibling;
+        if (suffix) suffix.textContent = ordinal(peer.percentiles.overall);
+
+        // Animated bars
+        const metrics = ['velocity', 'repos', 'stars', 'languages'];
+        metrics.forEach(m => {
+            const bar = $(`zl-peer-bar-${m}`);
+            const val = $(`zl-peer-val-${m}`);
+            const pct = peer.percentiles[m] ?? 0;
+            if (bar) setTimeout(() => { bar.style.width = `${pct}%`; }, 300);
+            if (val) val.textContent = `${pct}%`;
+        });
+
+        // Peer count
+        const countEl = $('zl-peer-count');
+        if (countEl) countEl.textContent = peer.total_peers;
+    }
+
     async function init() {
         const username = ZL.getUsername();
         if (!username) {
@@ -191,6 +222,11 @@
             setStatus(`Synced ${data.profile.login}`, 'ready');
             const timeEl = $('zl-status-time');
             if (timeEl) timeEl.textContent = `Updated ${new Date().toLocaleTimeString()}`;
+
+            // Fetch peer percentile (non-blocking)
+            ZL.fetchPeerPercentile(username).then(peer => {
+                if (peer) renderPeerPercentile(peer);
+            }).catch(() => {});
         } catch (err) {
             console.error('[ZeroLabs] analysis failed:', err);
             showError(err.message || 'Could not reach the ZeroLabs backend. Make sure it is running on :3001.');

@@ -227,6 +227,10 @@
      */
     function setupIndexAnalyze() {
         if (!isIndexPage()) return;
+        // index.html has its own full-featured go() handler that fetches data
+        // before navigating. Don't add a competing handler that navigates early
+        // without the ?u= parameter, which would load the wrong user from sessionStorage.
+        if (document.getElementById('zl-loader-overlay')) return;
 
         injectLoadingOverlay();
 

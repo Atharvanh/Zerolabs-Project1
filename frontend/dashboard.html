@@ -94,6 +94,7 @@
         </style>
 
         <link rel="stylesheet" href="zerolabs.css">
+        <script src="theme.js"></script>
         <link rel="stylesheet" href="transitions.css">
 </head>
 
@@ -152,10 +153,10 @@
                                         <p id="zl-sidebar-velocity" class="text-on-surface-variant text-xs">Career Velocity: --</p>
                                 </div>
                         </div>
-                        <button
-                                class="w-full bg-gradient-to-r from-primary to-primary-container text-on-primary font-semibold py-2 px-4 rounded hover:shadow-[0_0_15px_rgba(173,198,255,0.2)] transition-all flex items-center justify-center gap-2" href="index.html">
-                                <span class="material-symbols-outlined text-sm">add</span> Analyze New User
-                        </button>
+                        <a
+                                class="w-full bg-gradient-to-r from-primary to-primary-container text-on-primary font-semibold py-2 px-4 rounded hover:shadow-[0_0_15px_rgba(173,198,255,0.2)] transition-all flex items-center justify-center gap-2 no-underline" href="index.html">
+                                <span class="material-symbols-outlined text-sm">person_search</span> Analyze New User
+                        </a>
                 </div>
                 <div class="flex-1 space-y-1">
                         <a class="flex items-center gap-3 px-4 py-3 rounded-lg bg-[#2A2A2A] text-[#ADC6FF] shadow-[0_0_15px_rgba(173,198,255,0.1)] hover:translate-x-1 transition-transform duration-300 cursor-pointer transition-all"
@@ -218,9 +219,9 @@
                 <div id="zl-error" class="hidden mb-6 p-4 rounded-lg border border-red-500/30 bg-red-500/10 text-red-300 text-sm"></div>
                 <!-- Bento Grid Layout -->
                 <div class="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-[minmax(180px,_auto)]">
-                        <!-- Primary Metric: Velocity Score -->
+                <!-- Primary Metric: Velocity Score -->
                         <div
-                                class="md:col-span-8 lg:col-span-8 bg-surface-container-low rounded-xl border border-outline-variant/10 p-6 relative overflow-hidden group interactive-card">
+                                class="md:col-span-5 lg:col-span-5 bg-surface-container-low rounded-xl border border-outline-variant/10 p-6 relative overflow-hidden group interactive-card">
                                 <div
                                         class="absolute -top-24 -right-24 w-64 h-64 bg-primary/10 rounded-full blur-[60px] pointer-events-none group-hover:bg-primary/20 transition-all duration-700">
                                 </div>
@@ -245,6 +246,58 @@
                                 <div class="relative h-32 w-full mt-auto flex items-end gap-2">
                                         <div id="zl-velocity-bars"
                                                 class="w-full flex items-end justify-between gap-1 md:gap-2 h-full opacity-80">
+                                        </div>
+                                </div>
+                        </div>
+                        <!-- Peer Percentile Card -->
+                        <div
+                                class="md:col-span-3 lg:col-span-3 bg-surface-container-low rounded-xl border border-outline-variant/10 p-6 relative overflow-hidden group interactive-card">
+                                <div class="absolute -bottom-16 -left-16 w-48 h-48 bg-tertiary/10 rounded-full blur-[50px] pointer-events-none group-hover:bg-tertiary/20 transition-all duration-700"></div>
+                                <h3 class="text-sm font-semibold text-on-surface-variant uppercase tracking-wider mb-4 flex items-center gap-2 relative z-10">
+                                        <span class="material-symbols-outlined text-tertiary text-sm">leaderboard</span>
+                                        Peer Ranking
+                                </h3>
+                                <div id="zl-peer-card" class="relative z-10">
+                                        <!-- Filled by dashboard.js -->
+                                        <div class="text-center py-4">
+                                                <span class="text-5xl font-black text-tertiary tracking-tighter" id="zl-peer-overall">--</span>
+                                                <span class="text-xl text-on-surface-variant">th</span>
+                                                <p class="text-[10px] text-on-surface-variant uppercase tracking-widest mt-1">percentile overall</p>
+                                        </div>
+                                        <div class="space-y-3 mt-2" id="zl-peer-bars">
+                                                <div class="flex items-center gap-2 text-xs">
+                                                        <span class="text-on-surface-variant w-16 truncate">Velocity</span>
+                                                        <div class="flex-1 h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
+                                                                <div class="h-full bg-primary rounded-full transition-all duration-700" style="width: 0%" id="zl-peer-bar-velocity"></div>
+                                                        </div>
+                                                        <span class="text-on-surface-variant w-8 text-right" id="zl-peer-val-velocity">--</span>
+                                                </div>
+                                                <div class="flex items-center gap-2 text-xs">
+                                                        <span class="text-on-surface-variant w-16 truncate">Repos</span>
+                                                        <div class="flex-1 h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
+                                                                <div class="h-full bg-secondary rounded-full transition-all duration-700" style="width: 0%" id="zl-peer-bar-repos"></div>
+                                                        </div>
+                                                        <span class="text-on-surface-variant w-8 text-right" id="zl-peer-val-repos">--</span>
+                                                </div>
+                                                <div class="flex items-center gap-2 text-xs">
+                                                        <span class="text-on-surface-variant w-16 truncate">Stars</span>
+                                                        <div class="flex-1 h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
+                                                                <div class="h-full bg-tertiary rounded-full transition-all duration-700" style="width: 0%" id="zl-peer-bar-stars"></div>
+                                                        </div>
+                                                        <span class="text-on-surface-variant w-8 text-right" id="zl-peer-val-stars">--</span>
+                                                </div>
+                                                <div class="flex items-center gap-2 text-xs">
+                                                        <span class="text-on-surface-variant w-16 truncate">Languages</span>
+                                                        <div class="flex-1 h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
+                                                                <div class="h-full bg-error rounded-full transition-all duration-700" style="width: 0%" id="zl-peer-bar-languages"></div>
+                                                        </div>
+                                                        <span class="text-on-surface-variant w-8 text-right" id="zl-peer-val-languages">--</span>
+                                                </div>
+                                        </div>
+                                        <div class="mt-4 pt-3 border-t border-outline-variant/10 text-center">
+                                                <p class="text-[10px] text-on-surface-variant" id="zl-peer-group">
+                                                        Compared to <span class="text-primary font-bold" id="zl-peer-count">--</span> analyzed profiles
+                                                </p>
                                         </div>
                                 </div>
                         </div>

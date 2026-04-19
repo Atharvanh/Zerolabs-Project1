@@ -58,6 +58,7 @@
         .zl-spin { animation: zl-spin 1s linear infinite; transform-origin: 50% 50%; }
     </style>
     <link rel="stylesheet" href="zerolabs.css">
+    <script src="theme.js"></script>
     <link rel="stylesheet" href="transitions.css">
 </head>
 <body class="bg-background text-on-surface antialiased min-h-screen flex flex-col md:flex-row">
@@ -122,6 +123,12 @@
                 <p id="zl-audit-sub" class="text-on-surface-variant text-base max-w-2xl mt-3">Cross-referencing your stated experience against the code in your repos.</p>
             </div>
 
+            <!-- URL scan details (populated by audit.js in url mode) -->
+            <section id="zl-audit-url-scan" class="hidden"></section>
+
+            <!-- Repo meta badge (populated by audit.js in repo mode) -->
+            <section id="zl-audit-repo-meta" class="hidden"></section>
+
             <!-- Verdict -->
             <section id="zl-audit-verdict" class="glass-card p-8 rounded-xl ghost-border"></section>
 
@@ -168,6 +175,15 @@
                     <div class="flex-1 h-px bg-outline-variant/20"></div>
                 </div>
                 <ol id="zl-audit-elevation" class="space-y-3 list-none"></ol>
+            </section>
+
+            <!-- Technical Red Flags -->
+            <section>
+                <div class="flex items-center gap-3 mb-6">
+                    <h2 class="text-sm font-black uppercase tracking-[0.25em] text-error">Technical Red Flags</h2>
+                    <div class="flex-1 h-px bg-error/20"></div>
+                </div>
+                <div id="zl-audit-red-flags" class="space-y-3"></div>
             </section>
 
             <!-- Files sampled footnote -->

@@ -13,14 +13,14 @@ const KEY = process.env.GEMINI_API_KEY;
  *
  * @param {string} prompt       The user prompt.
  * @param {object} opts
- * @param {string} opts.model   'gemini-2.5-flash' (default) or 'gemini-2.5-pro'
+ * @param {string} opts.model   'gemini-3.1-flash-lite-preview' (default) or 'gemini-3.1-pro'
  * @param {string} opts.system  Optional system instruction.
  * @param {boolean} opts.json   If true, forces JSON output + parses it.
  * @param {object} opts.schema  Optional JSON schema for structured output.
  * @param {number} opts.temperature  0..1, default 0.3 (we want consistent analysis)
  */
 export async function gemini(prompt, {
-    model = 'gemini-2.5-flash',
+    model = 'gemini-3.1-flash-lite-preview',
     system,
     json = false,
     schema,
@@ -46,7 +46,7 @@ export async function gemini(prompt, {
     const url = `${GEMINI_BASE}/${model}:generateContent?key=${KEY}`;
 
     let attempt = 0;
-    while (attempt < 3) {
+    while (attempt < 5) {
         attempt++;
         const res = await fetch(url, {
             method: 'POST',
@@ -56,8 +56,8 @@ export async function gemini(prompt, {
 
         if (res.status === 429) {
             // Rate limited — wait and retry
-            const wait = attempt * 2000;
-            console.warn(`⏳ Gemini rate-limited, waiting ${wait}ms then retrying...`);
+            const wait = Math.pow(2, attempt) * 2000 + Math.random() * 1000;
+            console.warn(`⏳ Gemini rate-limited (attempt ${attempt}/5), waiting ${Math.round(wait)}ms then retrying...`);
             await sleep(wait);
             continue;
         }
